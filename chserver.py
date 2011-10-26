@@ -1,6 +1,5 @@
 """The local code-running server for Choose Python."""
 
-import contextlib
 import functools
 import json
 import os, os.path
@@ -20,7 +19,7 @@ def jsonp(fn):
         return "%s(%s);" % (jsfn, json.dumps(data))
     return wrapped
 
-b.debug(True)
+EXER_ROOT = os.path.join(os.path.dirname(__file__), "exercises")
 
 @b.route('/run')
 @jsonp
@@ -35,26 +34,16 @@ def run():
         'results': results,
         }
 
-EXER_ROOT = os.path.join(os.path.dirname(__file__), "exercises")
-
 @b.route('/exer/:name')
 def exer(name):
     html = open(os.path.join(EXER_ROOT, name+".html")).read()
     return b.template("exercise.html", name=name, html=html)
 
-@contextlib.contextmanager
-def change_dir(new_dir):
-    """Changes directory in a with statement, then changes back."""
-    old_dir = os.getcwd()
-    os.chdir(new_dir)
-    yield
-    os.chdir(old_dir)
-
-
 
 def main(args):
     port = 9000
     webbrowser.open("http://127.0.0.1:%d/exer/first" % port)
+    b.debug(True)
     b.run(host='localhost', port=port, reloader=True)
 
 if __name__ == '__main__':

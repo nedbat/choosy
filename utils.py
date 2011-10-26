@@ -1,7 +1,11 @@
+"""Utilities (mostly context managers) for Choosy."""
+
 import contextlib
+import os
 import shutil
 import sys
 import tempfile
+
 
 @contextlib.contextmanager
 def patchattr(obj, attr, val):
@@ -31,6 +35,7 @@ def isolated_modules():
         for m in [m for m in sys.modules if m not in mods]:
             del sys.modules[m]
 
+
 @contextlib.contextmanager
 def tempdir(prefix='tmp'):
     """A context manager for creating and then deleting a temporary directory."""
@@ -40,3 +45,11 @@ def tempdir(prefix='tmp'):
     finally:
         shutil.rmtree(tmpdir)
 
+
+@contextlib.contextmanager
+def change_dir(new_dir):
+    """Changes directory in a with statement, then changes back."""
+    old_dir = os.getcwd()
+    os.chdir(new_dir)
+    yield
+    os.chdir(old_dir)
