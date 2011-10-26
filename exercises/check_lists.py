@@ -1,4 +1,4 @@
-# test_lists.py
+# check_lists.py
 
 def check(exercise, output, c):
 

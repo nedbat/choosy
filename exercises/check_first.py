@@ -1,4 +1,4 @@
-# test_first.py
+# check_first.py
 
 def check(exercise, output, c):
     with c.expect("""You should have a variable named "a"."""):
