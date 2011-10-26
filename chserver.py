@@ -2,6 +2,7 @@
 
 import functools
 import json
+import optparse
 import os, os.path
 import sys
 import webbrowser
@@ -41,10 +42,14 @@ def exer(name):
 
 
 def main(args):
+    parser = optparse.OptionParser()
+    parser.add_option("-d", "--debug", dest="debug", help="Turn on debugging", default=False, action="store_true")
+    options, args = parser.parse_args()
+
     port = 9000
     webbrowser.open("http://127.0.0.1:%d/exer/first" % port)
-    b.debug(True)
-    b.run(host='localhost', port=port, reloader=True)
+    b.debug(options.debug)
+    b.run(host='localhost', port=port, reloader=options.debug)
 
 if __name__ == '__main__':
     main(sys.argv)
