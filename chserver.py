@@ -26,7 +26,7 @@ EXER_ROOT = os.path.join(os.path.dirname(__file__), "exercises")
 def run():
     the_code = b.request.GET['code']
     name = b.request.GET['name']
-    check_code = open(os.path.join(EXER_ROOT, "test_%s.py" % name)).read()
+    check_code = open(os.path.join(EXER_ROOT, "check_%s.py" % name)).read()
     output, results = run_python(the_code, check_code)
     return {
         'status': 'ok',
