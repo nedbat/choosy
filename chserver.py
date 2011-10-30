@@ -20,14 +20,14 @@ def jsonp(fn):
         return "%s(%s);" % (jsfn, json.dumps(data))
     return wrapped
 
-EXER_ROOT = os.path.join(os.path.dirname(__file__), "exercises")
+FILE_ROOT = None
 
-@b.route('/run')
+@b.route('/_run')
 @jsonp
 def run():
     the_code = b.request.GET['code']
     name = b.request.GET['name']
-    check_code = open(os.path.join(EXER_ROOT, "check_%s.py" % name)).read()
+    check_code = open(os.path.join(FILE_ROOT, "check_%s.py" % name)).read()
     output, results = run_python(the_code, check_code)
     return {
         'status': 'ok',
@@ -35,10 +35,20 @@ def run():
         'results': results,
         }
 
-@b.route('/exer/:name')
-def exer(name):
-    html = open(os.path.join(EXER_ROOT, name+".html")).read()
-    return b.template("exercise.html", name=name, html=html)
+@b.route('/:path#[\\w/.]+#')
+def page(path):
+    """Serve a page at a `path`, relative to `FILE_ROOT`."""
+    filepath = os.path.join(FILE_ROOT, path)
+    try:
+        f = open(filepath)
+    except IOError:
+        if not filepath.endswith(".html"):
+            f = open(filepath + ".html")
+        else:
+            raise
+    with f:
+        html = f.read()
+    return b.template("exercise.html", html=html)
 
 
 def main(args):
@@ -46,11 +56,21 @@ def main(args):
     parser.add_option("-d", "--debug", dest="debug", help="Turn on debugging", default=False, action="store_true")
     options, args = parser.parse_args()
 
+    first_page = None
+    if len(args) >= 1:
+        first_page = args[0]
+
+    if not first_page:
+        print "No first page specified"
+        return
+
+    global FILE_ROOT
+    FILE_ROOT, first_page = os.path.split(first_page)
+
     port = 9000
-    webbrowser.open("http://127.0.0.1:%d/exer/first" % port)
+    webbrowser.open("http://127.0.0.1:%d/%s" % (port, first_page))
     b.debug(options.debug)
     b.run(host='localhost', port=port, reloader=options.debug)
 
 if __name__ == '__main__':
     main(sys.argv)
-
