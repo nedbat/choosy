@@ -1,4 +1,4 @@
-"""Tests for utils.py"""
+"""Tests for run.py"""
 
 import os.path
 import sys
