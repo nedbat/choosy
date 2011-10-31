@@ -25,13 +25,13 @@ class Checker(object):
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type is self.Failure:
-            self.results.append(("BAD", self.msg, "%s" % exc_value))
+            self.results.append(("FAIL", self.msg, "%s" % exc_value))
             if self.continue_on_fail:
                 return True
             else:
                 raise self.Done()
         elif exc_type:
-            self.results.append(("FAIL", self.msg, "%s" % exc_value))
+            self.results.append(("ERROR", self.msg, "%s" % exc_value))
             return False
         else:
             self.results.append(("OK", self.msg))
@@ -52,12 +52,14 @@ def run_python(py, check):
     
         [
             ('OK', 'You should have a variable named a'),
-            ('BAD', 'a should equal 17', 'Your a equals 43'),
+            ('FAIL', 'a should equal 17', 'Your a equals 43'),
         ]
 
-    The first element of each tuple is a status ('OK', 'BAD', or 'FAIL').  
-    The second element is the text of the `expect` call, what was expected.
-    A third element, if present, is what actually happened.
+    The first element of each tuple is a status ('OK', 'FAIL', or 'ERROR').
+    'OK' means the expectations was met, 'FAIL' means it wasn't met, and
+    'ERROR' means an exception was encountered.  The second element is the text
+    of the `expect` call, what was expected.  A third element, if present, is
+    what actually happened.
 
     """
     output, results = "", []

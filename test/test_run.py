@@ -28,7 +28,7 @@ class CheckerTest(unittest.TestCase):
             self.fail("We shouldn't have continued after a failed c.should")
         except Checker.Done:
             pass
-        self.assertEqual(c.results, [('BAD', "This should work", "It failed!")])
+        self.assertEqual(c.results, [('FAIL', "This should work", "It failed!")])
 
     def test_failure_with_continue_on_fail(self):
         c = Checker()
@@ -40,7 +40,7 @@ class CheckerTest(unittest.TestCase):
                 pass
         except Checker.Done:
             self.fail("Shouldn't have raised Done here.")
-        self.assertEqual(c.results, [('BAD', "This should work", "It failed!"), ('OK', "Also this one")])
+        self.assertEqual(c.results, [('FAIL', "This should work", "It failed!"), ('OK', "Also this one")])
 
     def test_test(self):
         c = Checker()
@@ -51,7 +51,7 @@ class CheckerTest(unittest.TestCase):
                 raise Exception("Shouldn't have gotten to here")
         except Checker.Done:
             pass
-        self.assertEqual(c.results, [('BAD', "This should definitely work", "Oops, this was bad")])
+        self.assertEqual(c.results, [('FAIL', "This should definitely work", "Oops, this was bad")])
 
 
 class RunPythonTest(unittest.TestCase):
