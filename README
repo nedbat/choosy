@@ -9,6 +9,15 @@ to check the results of the students' work.
 Students complete exercises, then choosy runs their code, then runs the
 instructor's check code to determine the outcome of the student's work.
 
+Trying it
+---------
+
+At a command prompt:
+
+    $ python chserver.py exercises/first.html
+
+A browser window will appear.  Enjoy.
+
 
 Writing exercises
 -----------------
