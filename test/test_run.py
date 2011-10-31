@@ -83,6 +83,6 @@ class RunPythonTest(unittest.TestCase):
         out, res = run_python("""a = 17""", """1'hello'""")
         self.assertEqual("", out)
         self.assertEqual(len(res), 1)
-        self.assertEqual(res[0][0], "FAIL")
+        self.assertEqual(res[0][0], "ERROR")
         self.assertIn("1'hello'", res[0][2])
         self.assertIn("SyntaxError", res[0][2])

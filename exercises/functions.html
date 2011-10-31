@@ -1,0 +1,40 @@
+<p>Functions are created with the <b>def</b> keyword.  Here's a function that squares its argument:</p>
+
+<pre>def square(x):
+    return x * x</pre>
+
+<p>Define a function centered_average that
+returns the "centered" average of an array of ints, which we'll say is the mean average of the values, 
+except not counting the largest and smallest values in the array. 
+Use int division to produce the final average. You may assume that the array is length 3 or more.</p>
+
+<ul>
+    <li>centered_average([1, 2, 3, 4, 100]) &rarr; 3</li>
+    <li>centered_average([1, 1, 5, 5, 10, 8, 7]) &rarr; 5</li>
+    <li>centered_average([-10, -4, -2, -4, -2, 0]) &rarr; -3</li>
+</ul>
+
+<p>Note: I copied this exercise from CodingBat, not for distribution!</p>
+
+<div class='exercise' id='functions'>
+    <textarea class='code' cols='80' rows='10'>def centered_average(nums):</textarea>
+    <p><input class='run_code' type='button' value='Run it'></input></p>
+    <textarea class='output' style='display:none' cols='80' rows='10'>
+    </textarea>
+    <div class='results'></div>
+</div>
+
+<p>PS: if you want to see how this works without solving the exercise:</p>
+
+<pre>
+def centered_average(nums):
+    min = max = None
+    sum = 0
+    for n in nums:
+        if min is None or n < min:
+            min = n
+        if max is None or n > max:
+            max = n
+        sum += n
+    return (sum - min - max) / (len(nums)-2)
+</pre>
