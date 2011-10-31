@@ -53,6 +53,21 @@ class CheckerTest(unittest.TestCase):
             pass
         self.assertEqual(c.results, [('FAIL', "This should definitely work", "Oops, this was bad")])
 
+    def test_error(self):
+        class MyException(Exception): 
+            pass
+        c = Checker()
+        saw_exc = False
+        try:
+            with c.expect("Everything will be fine"):
+                raise MyException("It wasn't fine!")
+        except Checker.Done:
+            pass
+        except MyException:
+            saw_exc = True
+        self.assertEqual(c.results, [('ERROR', "Everything will be fine", "It wasn't fine!")])
+        self.assertEqual(saw_exc, True)
+
 
 class RunPythonTest(unittest.TestCase):
     def test_output(self):
