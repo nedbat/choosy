@@ -1,0 +1,6 @@
+; .coveragerc for Choosy
+[run]
+branch = True
+source = .
+omit = bottle.py
+
