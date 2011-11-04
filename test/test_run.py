@@ -15,7 +15,7 @@ class CheckerTest(unittest.TestCase):
         try:
             with c.expect("This should work"):
                 pass
-        except Checker.Done:
+        except Checker.Done:    # pragma: nocover
             self.fail("Shouldn't have raised Done here.")
         self.assertEqual(c.results, [('OK', "This should work")])
 
@@ -24,8 +24,8 @@ class CheckerTest(unittest.TestCase):
         try:
             with c.expect("This should work"):
                 c.fail("It failed!")
-                self.fail("We shouldn't have run past a c.fail")
-            self.fail("We shouldn't have continued after a failed c.should")
+                self.fail("We shouldn't have run past a c.fail")    # pragma: nocover
+            self.fail("We shouldn't have continued after a failed c.should")    # pragma: nocover
         except Checker.Done:
             pass
         self.assertEqual(c.results, [('FAIL', "This should work", "It failed!")])
@@ -35,10 +35,10 @@ class CheckerTest(unittest.TestCase):
         try:
             with c.expect("This should work", continue_on_fail=True):
                 c.fail("It failed!")
-                self.fail("We shouldn't have run past a c.fail")
+                self.fail("We shouldn't have run past a c.fail")    # pragma: nocover
             with c.expect("Also this one"):
                 pass
-        except Checker.Done:
+        except Checker.Done:    # pragma: nocover
             self.fail("Shouldn't have raised Done here.")
         self.assertEqual(c.results, [('FAIL', "This should work", "It failed!"), ('OK', "Also this one")])
 
@@ -48,7 +48,7 @@ class CheckerTest(unittest.TestCase):
             with c.expect("This should definitely work"):
                 c.test(True, "This one was ok")
                 c.test(False, "Oops, this was bad")
-                raise Exception("Shouldn't have gotten to here")
+                raise Exception("Shouldn't have gotten to here")    # pragma: nocover
         except Checker.Done:
             pass
         self.assertEqual(c.results, [('FAIL', "This should definitely work", "Oops, this was bad")])
@@ -62,7 +62,7 @@ class CheckerTest(unittest.TestCase):
             with c.expect("Everything will be fine"):
                 raise MyException("It wasn't fine!")
         except Checker.Done:
-            pass
+            raise Exception("Shouldn't get here")   # pragma: nocover
         except MyException:
             saw_exc = True
         self.assertEqual(c.results, [('ERROR', "Everything will be fine", "It wasn't fine!")])
