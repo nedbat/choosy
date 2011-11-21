@@ -4,7 +4,8 @@ import os.path
 import sys
 import unittest
 
-from run import Checker, run_python
+from exerciser import Checker
+from run import run_python
 
 
 class CheckerTest(unittest.TestCase):
