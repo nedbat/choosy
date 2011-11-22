@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exercise: {{ ex.name }}</title>
+        <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+        <script>
+            choosepython = {
+
+                run_python: function(test_name, code, output, results) {
+                    $(output).val("");
+                    $(results).html("");
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "/gym/run/{{ ex.id }}/",
+                        data: {
+                            code: $(code).val(),
+                            csrfmiddlewaretoken: "{{ csrf_token }}"
+                        },
+                        success: function(obj) {
+                            if (obj.output) {
+                                $(output).show();
+                            }
+                            $(output).val(obj.output);
+                            $(obj.results).each( function(i, res) {
+                                if (res[0] === "ERROR") {
+                                    $(results).append($("<pre class='ERROR'>" + res[2] + "</pre>"));
+                                }
+                                else {
+                                    $(results).append($("<p class='" + res[0] + "'>" + res[1] + "</p>"));
+                                    if (res[2]) {
+                                        $(results).append($("<p>" + res[2] + "</p>"));
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+
+            $(function() {
+                $('.run_code').click(
+                    function(ev) {
+                        var btn = ev.target;
+                        var par = $(btn).parents(".exercise");
+                        var test_name = par.attr("id");
+                        choosepython.run_python(test_name, par.find(".code"), par.find(".output"), par.find(".results"));
+                    }
+                );
+            });
+        </script>
+        <style>
+            body, html {
+                font-family: Georgia, serif;
+            }
+            body {
+                margin: 4em auto;
+            }
+            p, pre {
+                line-height: 1.3;
+                font-size: 120%;
+            }
+            pre {
+                margin: 1em 3em;
+                padding: 1em 1em;
+                background: #eee;
+            }
+            h1 {
+                font-size: 140%;
+            }
+            h2 {
+                font-size: 120%;
+            }
+            #content {
+                margin: 0 auto;
+                max-width: 50em;
+            }
+            .results p {
+                padding: .5em 1em;
+            }
+            .results p.OK {
+                background: #cfc;
+            }
+            .results p.FAIL {
+                background: #fcc;
+            }
+        </style>
+    </head>
+    <body>
+        <div id='content'>
+            {{ ex.text|safe }}
+
+            <div class='exercise'>
+                <textarea class='code' cols='80' rows='10'></textarea>
+                <p><input class='run_code' type='button' value='Run it'></input></p>
+                <textarea class='output' style='display:none' cols='80' rows='10'>
+                </textarea>
+                <div class='results'></div>
+            </div>
+        </div>
+    </body>
+</html>

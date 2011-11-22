@@ -1,0 +1,6 @@
+<h1>Choose Python</h1>
+<ul>
+    {% for ex in exes %}
+    <li><a href='{{ ex.get_absolute_url }}'>{{ex}}</a></li>
+    {% endfor %}
+</ul>

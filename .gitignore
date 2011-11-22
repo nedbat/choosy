@@ -1,5 +1,7 @@
 *.pyc
 *.pyo
 
+database.db
+
 .coverage
 htmlcov
