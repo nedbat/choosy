@@ -2,5 +2,3 @@
 [run]
 branch = True
 source = .
-omit = bottle.py
-
