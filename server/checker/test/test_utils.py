@@ -4,7 +4,7 @@ import os.path
 import sys
 import unittest
 
-from utils import patchattr, isolated_modules, tempdir
+from checker.utils import patchattr, isolated_modules, tempdir
 
 class Generic(object):
     """An object we can use generically in tests."""
