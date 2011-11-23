@@ -93,7 +93,8 @@ class Checker(object):
 
 def run_exercise(tmpdir):
     output, results = "", []
-    with patchattr(sys, 'stdout', StringIO()) as stdout:
+    with patchattr(sys, 'stdout', StringIO()) as stdout, \
+        patchattr(sys, 'path', ['.']+sys.path):
         with isolated_modules():
             try:
                 import exercise
