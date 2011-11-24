@@ -12,7 +12,7 @@ import sys
 log = logging.getLogger(__name__)
 
 @staff_member_required
-def settings(request):
+def dump_settings(request):
     """Dump all the settings to the log file.
 
     Don't write them to the response: insecure.
@@ -26,20 +26,20 @@ def settings(request):
     return HttpResponse("Settings have been logged.")
 
 @staff_member_required
-def error(request):
+def raise_error(request):
     """Generate an exception.  How else will we know if our stack traces are working?"""
     msg = request.GET.get("msg", "Something bad happened! (on purpose)")
     raise Exception(msg)
 
 @staff_member_required
-def email(request):
+def send_email(request):
     """Send an email to test the mail-sending infrastructure."""
     msg = request.GET.get("msg", "Test of sending email")
     send_mail(msg, 'The body also says "%s"' % msg, settings.DEFAULT_FROM_EMAIL, [request.user.email], fail_silently=False)
     return HttpResponse("An email was sent to %s" % request.user.email)
 
 @staff_member_required
-def environment(request):
+def dump_environment(request):
     """Dump all the environment variables to the log file."""
     log.info("----- Environment variables:")
     for name, value in sorted(os.environ.items()):
@@ -47,7 +47,7 @@ def environment(request):
     return HttpResponse("Environment variables have been logged.")
 
 @staff_member_required
-def modules(request):
+def dump_modules(request):
     """Dump all the modules and their version to the log file."""
     log.info("----- Python modules:")
     for name, module in sorted(sys.modules.items()):

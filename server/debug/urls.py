@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('debug.views',
-    url(r'^settings/$', 'settings'),
-    url(r'^error/$', 'error'),
-    url(r'^email/$', 'email'),
-    url(r'^environment/$', 'environment'),
-    url(r'^modules/$', 'modules'),
+    url(r'^settings/$', 'dump_settings'),
+    url(r'^error/$', 'raise_error'),
+    url(r'^email/$', 'send_email'),
+    url(r'^environment/$', 'dump_environment'),
+    url(r'^modules/$', 'dump_modules'),
 )
