@@ -145,3 +145,9 @@ LOGGING = {
         },
     }
 }
+
+# Import a local.py if it exists.
+try:
+    from local import *
+except ImportError:
+    pass

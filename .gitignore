@@ -1,6 +1,8 @@
 *.pyc
 *.pyo
 
+local.py
+
 database.db
 
 .coverage
