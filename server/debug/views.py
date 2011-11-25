@@ -26,6 +26,14 @@ def dump_settings(request):
     return HttpResponse("Settings have been logged.")
 
 @staff_member_required
+def dump_path(request):
+    """Dump the sys.path to the log."""
+    log.info("----- Python path:")
+    for i, d in enumerate(sys.path):
+        log.info("%2d: %s" % (i, d))
+    return HttpResponse("The Python path has been logged.")
+
+@staff_member_required
 def raise_error(request):
     """Generate an exception.  How else will we know if our stack traces are working?"""
     msg = request.GET.get("msg", "Something bad happened! (on purpose)")
