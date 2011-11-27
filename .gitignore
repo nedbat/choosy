@@ -3,7 +3,8 @@
 
 local.py
 
-database.db
+server/database.db
+server/srvstat
 
 .coverage
 htmlcov
