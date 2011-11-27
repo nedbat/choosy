@@ -3,9 +3,12 @@
     <head>
         <title>Exercise: {{ ex.name }}</title>
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+        <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
+        <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/static/codemirror.css">
+        <link rel="stylesheet" href="/static/eclipse.css">
         <script>
             choosepython = {
-
                 run_python: function(test_name, code, output, results) {
                     $(output).val("");
                     $(results).html("");
@@ -39,12 +42,30 @@
             };
 
             $(function() {
+                choosepython.codemirror = CodeMirror.fromTextArea($("#editor")[0], {
+                    mode: {
+                        name: "python",
+                        version: 2,
+                        singleLineStringErrors: true
+                        },
+                    theme: "eclipse",
+                    lineNumbers: true,
+                    tabMode: "shift",
+                    indentUnit: 4
+                    });
+
                 $('.run_code').click(
                     function(ev) {
+                        choosepython.codemirror.save();
                         var btn = ev.target;
                         var par = $(btn).parents(".exercise");
                         var test_name = par.attr("id");
                         choosepython.run_python(test_name, par.find(".code"), par.find(".output"), par.find(".results"));
+                    }
+                );
+                $('.highlight').click(
+                    function(ev) {
+                        choosepython.codemirror.setLineClass(2, "errorline");
                     }
                 );
             });
@@ -84,6 +105,24 @@
             .results p.FAIL {
                 background: #fcc;
             }
+            #editor {
+                font-size: 120%;
+                width: 800px;
+                height: 300px;
+            }
+            .errorline { background: #fcc !important;}
+            .CodeMirror { 
+                border: 2px solid #cccccc; 
+                background: #ffc;
+                font-size: 120%;
+            }
+            .CodeMirror-scroll {
+                height: auto;
+                min-height: 8em;
+                overflow-y: hidden;
+                overflow-x: auto;
+                width: 100%;
+            }
         </style>
     </head>
     <body>
@@ -91,7 +130,7 @@
             {{ ex.text|safe }}
 
             <div class='exercise'>
-                <textarea class='code' cols='80' rows='10'></textarea>
+                <textarea class='code' id='editor'></textarea>
                 <p><input class='run_code' type='button' value='Run it'></input></p>
                 <textarea class='output' style='display:none' cols='80' rows='10'>
                 </textarea>
