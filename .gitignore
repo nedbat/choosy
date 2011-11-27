@@ -5,6 +5,7 @@ local.py
 
 server/database.db
 server/srvstat
+server/checker/pypy-sandbox
 
 server/checker/pypy-sandbox
 
