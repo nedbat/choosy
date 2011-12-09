@@ -1,0 +1,13 @@
+{% if exercise_form.instance.id %}
+<h1>Edit Exercise</h1>
+{% else %}
+<h1>Add Exercise</h1>
+{% endif %}
+
+<form action="." method="post">
+{% csrf_token %}
+<table>
+{{ exercise_form.as_table }}
+</table>
+<input type="submit" value="Save" />
+</form>

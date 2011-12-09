@@ -1,0 +1,8 @@
+<h1>Choose Python</h1>
+<p><a href='{% url new_exercise %}'>Create an exercise</a></p>
+<p>Edit an exercise:</p>
+<ul>
+    {% for ex in exes %}
+    <li><a href='{% url edit_exercise ex.id %}'>{{ex}}</a></li>
+    {% endfor %}
+</ul>
