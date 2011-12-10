@@ -21,5 +21,5 @@ def edit(request, exid=None):
         return redirect(index)
 
     ctx = RequestContext(request)
-    ctx['exercise_form'] = form
+    ctx['form'] = form
     return render_to_response('desk/templates/edit_exercise.html', ctx)
