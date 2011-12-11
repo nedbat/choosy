@@ -1,6 +1,10 @@
-<h1>Choose Python</h1>
+{% extends "site/templates/base.html" %}
+
+{% block main %}
+<h1>Exercises</h1>
 <ul>
     {% for ex in exes %}
     <li><a href='{{ ex.get_absolute_url }}'>{{ex}}</a></li>
     {% endfor %}
 </ul>
+{% endblock main %}

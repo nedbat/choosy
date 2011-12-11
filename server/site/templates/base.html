@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}Choose Python{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div id="container">
+      <header>
+        <p>Choose Python / 
+          <a href="{% url gym %}">Exercises</a> / 
+          <a href="{% url desk %}">Write your own</a> / 
+          About
+        </p>
+      </header>
+      <div id="main">
+        {% block main %}{% endblock %}
+      </div>
+      <footer>
+        <p>&copy; 2011, Ned Batchelder.</p>
+      </footer>
+    </div>
+  </body>
+</html>

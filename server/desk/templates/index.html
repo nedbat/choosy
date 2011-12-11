@@ -1,4 +1,7 @@
-<h1>Choose Python</h1>
+{% extends "site/templates/base.html" %}
+
+{% block main %}
+<h1>Your Exercises</h1>
 <p><a href='{% url new_exercise %}'>Create an exercise</a></p>
 <p>Edit an exercise:</p>
 <ul>
@@ -6,3 +9,4 @@
     <li><a href='{% url edit_exercise ex.id %}'>{{ex}}</a></li>
     {% endfor %}
 </ul>
+{% endblock main %}
