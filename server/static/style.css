@@ -1,0 +1,53 @@
+body, html {
+    font-family: Georgia, serif;
+}
+body {
+    margin: 4em auto;
+}
+p, pre {
+    line-height: 1.3;
+    font-size: 120%;
+}
+pre {
+    margin: 1em 3em;
+    padding: 1em 1em;
+    background: #eee;
+}
+h1 {
+    font-size: 140%;
+}
+h2 {
+    font-size: 120%;
+}
+#content {
+    margin: 0 auto;
+    max-width: 50em;
+}
+.results p {
+    padding: .5em 1em;
+}
+.results p.OK {
+    background: #cfc;
+}
+.results p.FAIL {
+    background: #fcc;
+}
+#editor {
+    font-size: 120%;
+    width: 800px;
+    height: 300px;
+}
+.errorline { background: #fcc !important;}
+.CodeMirror { 
+    border: 2px solid #cccccc; 
+    background: #ffc;
+    font-size: 120%;
+}
+.CodeMirror-scroll {
+    height: auto;
+    min-height: 8em;
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+}
+
