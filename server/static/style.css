@@ -15,7 +15,7 @@ header {
     color: #eef;
     margin: 0;
     padding: .5em 1em;
-    border-bottom: 1px solid #ee0;
+    border-bottom: 2px solid #ccc;
     font-family: Verdana, sans-serif;
 }
 header p {
@@ -93,3 +93,25 @@ h2 {
     width: 100%;
 }
 
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+div.field {
+    margin: 1em 0;
+}
+div.widget {
+    margin: 0 0 0 8em;
+}
+label {
+    float: left;
+    width: 7em;
+    text-align: right;
+}
+label div.explain {
+    padding-top: 1em;
+    font-size: 80%;
+    font-style: italic;
+    color: #888;
+}
