@@ -92,7 +92,10 @@ h2 {
     overflow-x: auto;
     width: 100%;
 }
-
+body.mceContentBody {
+    background: white;
+    margin: 10px;
+}
 fieldset {
     border: none;
     margin: 0;
@@ -112,6 +115,7 @@ label {
 label div.explain {
     padding-top: 1em;
     font-size: 80%;
+    line-height: 1.50;
     font-style: italic;
     color: #888;
 }
