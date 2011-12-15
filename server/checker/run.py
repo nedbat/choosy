@@ -83,7 +83,7 @@ if USE_PYPY:
             '-S',                   # Don't try to import the non-existent 'site' module
             '-c', code,             # Run this code
             ]
-        sandproc = ChoosySandboxedProc(PYPY_SANDBOX, args, tmpdir='.')
+        sandproc = ChoosySandboxedProc(PYPY_SANDBOX, args, tmpdir='.', debug=False)
         #if timeout is not None:
         #    sandproc.settimeout(timeout, interrupt_main=True)
         try:
