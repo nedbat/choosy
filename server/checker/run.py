@@ -97,7 +97,7 @@ if USE_PYPY:
                 except ValueError:
                     result = [('ERROR', "Bad json: %r" % output)]
             else:
-                result = [('ERROR', "Process ended with %s: %s" % code_error.getvalue())]
+                result = [('ERROR', "Process ended with %s: %s" % (retcode, code_error.getvalue()))]
             return result
         finally:
             sandproc.kill()
