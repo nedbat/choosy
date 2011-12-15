@@ -90,6 +90,10 @@ if USE_PYPY:
             code_output = StringIO.StringIO()
             sandproc.interact(stdout=code_output, stderr=code_output)
             output = code_output.getvalue()
-            return json.loads(output)
+            try:
+                result = json.loads(output)
+            except ValueError:
+                raise ValueError("Bad json: %r" % output)
+            return result
         finally:
             sandproc.kill()
