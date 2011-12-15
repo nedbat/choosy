@@ -88,12 +88,16 @@ if USE_PYPY:
         #    sandproc.settimeout(timeout, interrupt_main=True)
         try:
             code_output = StringIO.StringIO()
-            sandproc.interact(stdout=code_output, stderr=code_output)
-            output = code_output.getvalue()
-            try:
-                result = json.loads(output)
-            except ValueError:
-                raise ValueError("Bad json: %r" % output)
+            code_error = StringIO.StringIO()
+            retcode = sandproc.interact(stdout=code_output, stderr=code_error)
+            if retcode == 0:
+                output = code_output.getvalue()
+                try:
+                    result = json.loads(output)
+                except ValueError:
+                    result = [('ERROR', "Bad json: %r" % output)]
+            else:
+                result = [('ERROR', "Process ended with %s: %s" % code_error.getvalue())]
             return result
         finally:
             sandproc.kill()
