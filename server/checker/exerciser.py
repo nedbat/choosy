@@ -1,3 +1,11 @@
+"""Glue code running in Choosy's sandbox.
+
+This file is the bulk of the code running in the sandbox to execute the 
+student's code, and then the teacher's checking code.  Because it runs
+in the sandbox, it may be limited, for example, no file writing.
+
+"""
+
 from cStringIO import StringIO
 import json
 import os
@@ -92,7 +100,31 @@ class Checker(object):
 
 
 def run_exercise(tmpdir):
-    output, results = "", []
+    """Run the student and teacher code.
+
+    `tmpdir` is the path to a directory containing "exercise.py" and 
+    "check.py", which will be imported to execute them.
+
+    Returns a dictionary `results`.
+
+    results['stdout'] is the stdout of the exercise.
+
+    results['checks'] is a list of tuples::
+    
+        [
+            ('OK', 'You should have a variable named a'),
+            ('FAIL', 'a should equal 17', 'Your a equals 43'),
+        ]
+
+    The first element of each tuple is a status ('OK', 'FAIL', or 'ERROR').
+    'OK' means the expectations was met, 'FAIL' means it wasn't met, and
+    'ERROR' means an exception was encountered.  The second element is the text
+    of the `expect` call, what was expected.  A third element, if present, is
+    what actually happened.
+
+    """
+    results = {'stdout': '', 'checks': []}
+
     with patchattr(sys, 'stdout', StringIO()) as stdout, \
         patchattr(sys, 'path', ['.']+sys.path):
         with isolated_modules():
@@ -110,15 +142,15 @@ def run_exercise(tmpdir):
                     c = Checker()
                     import check
                     try:
-                        check.check(exercise, output, c)
+                        check.check(exercise, stdout, c)
                     except c.Done:
                         pass
-                    results = c.results
+                    results['checks'] = c.results
                 except Exception as e:
                     # Something went wrong in the checking code.
                     tb = traceback.format_exc()
-                    results = [('ERROR', '', tb)]
+                    results['checks'] = [('ERROR', '', tb)]
             finally:
-                output = stdout.getvalue()
+                results['stdout'] = stdout.getvalue()
 
-    return output, results
+    return results

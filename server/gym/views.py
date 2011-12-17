@@ -23,10 +23,6 @@ def run(request, exid):
     ex = get_object_or_404(Exercise, pk=exid)
     the_code = request.POST.get('code')
     check_code = ex.check
-    output, results = run_python(the_code, check_code)
-    response_data = {
-        'status': 'ok',
-        'output': output,
-        'results': results,
-        }
-    return HttpResponse(json.dumps(response_data), mimetype="application/json")
+    results = run_python(the_code, check_code)
+    results['status'] = 'ok'
+    return HttpResponse(json.dumps(results), mimetype="application/json")

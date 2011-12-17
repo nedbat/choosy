@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="/static/eclipse.css">
   <script>
       choosepython = {
-          run_python: function(test_name, code, output, results) {
-              $(output).val("");
-              $(results).html("");
+          run_python: function(test_name, code, stdout, checks) {
+              $(stdout).val("");
+              $(checks).html("");
               $.ajax({
                   type: "POST",
                   dataType: "json",
@@ -21,18 +21,18 @@
                       csrfmiddlewaretoken: "{{ csrf_token }}"
                   },
                   success: function(obj) {
-                      if (obj.output) {
-                          $(output).show();
+                      if (obj.stdout) {
+                          $(stdout).show();
                       }
-                      $(output).val(obj.output);
-                      $(obj.results).each( function(i, res) {
+                      $(stdout).val(obj.stdout);
+                      $(obj.checks).each( function(i, res) {
                           if (res[0] === "ERROR") {
-                              $(results).append($("<pre class='ERROR'>" + res[2] + "</pre>"));
+                              $(checks).append($("<pre class='ERROR'>" + res[2] + "</pre>"));
                           }
                           else {
-                              $(results).append($("<p class='" + res[0] + "'>" + res[1] + "</p>"));
+                              $(checks).append($("<p class='" + res[0] + "'>" + res[1] + "</p>"));
                               if (res[2]) {
-                                  $(results).append($("<p>" + res[2] + "</p>"));
+                                  $(checks).append($("<p>" + res[2] + "</p>"));
                               }
                           }
                       });
@@ -60,7 +60,7 @@
                   var btn = ev.target;
                   var par = $(btn).parents(".exercise");
                   var test_name = par.attr("id");
-                  choosepython.run_python(test_name, par.find(".code"), par.find(".output"), par.find(".results"));
+                  choosepython.run_python(test_name, par.find(".code"), par.find(".stdout"), par.find(".checks"));
               }
           );
           $('.highlight').click(
@@ -78,8 +78,8 @@
   <div class='exercise'>
     <textarea class='code' id='editor'></textarea>
     <p><input class='run_code' type='button' value='Run it'></input></p>
-    <textarea class='output' style='display:none' cols='80' rows='10'>
+    <textarea class='stdout' style='display:none' cols='80' rows='10'>
     </textarea>
-    <div class='results'></div>
+    <div class='checks'></div>
   </div>
 {% endblock main %}

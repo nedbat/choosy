@@ -10,28 +10,18 @@ import traceback
 
 USE_PYPY = bool(os.environ.get('USE_PYPY', False))
 
-def run_python(py, check):
-    """Run a chunk of python code, and then check it with check code.
+def run_python(exercise, check):
+    """Run exercise python code, and then check it with check code.
     
-    Returned tuple is `(stdout, results)`: `results` is a list of 
-    tuples::
-    
-        [
-            ('OK', 'You should have a variable named a'),
-            ('FAIL', 'a should equal 17', 'Your a equals 43'),
-        ]
-
-    The first element of each tuple is a status ('OK', 'FAIL', or 'ERROR').
-    'OK' means the expectations was met, 'FAIL' means it wasn't met, and
-    'ERROR' means an exception was encountered.  The second element is the text
-    of the `expect` call, what was expected.  A third element, if present, is
-    what actually happened.
+    Returns the same value as `exerciser.run_exercise`.
 
     """
-    with tempdir(prefix='choosepy-') as tmpdir:
+    # We write the exercise and check code to files in a new temporary
+    # directory, then invoke exerciser.run_exercise.
+    with tempdir(prefix='choosy-') as tmpdir:
         with change_dir(tmpdir):
             with open("exercise.py", "w") as f:
-                f.write(py)
+                f.write(exercise)
 
             with open("check.py", "w") as f:
                 f.write(check)

@@ -72,18 +72,19 @@ class CheckerTest(unittest.TestCase):
 
 class RunPythonTest(unittest.TestCase):
     def test_output(self):
-        out, res = run_python("""print 'hello!'""", "")
-        self.assertEqual(out, "hello!\n")
+        results = run_python("""print 'hello!'""", "")
+        self.assertEqual(results['stdout'], "hello!\n")
 
     def test_syntax_error_in_user_code(self):
-        out, res = run_python("""a = 1'hello'""", "")
-        self.assertIn("""1'hello'""", out)
-        self.assertIn("SyntaxError", out)
+        results = run_python("""a = 1'hello'""", "")
+        self.assertIn("""1'hello'""", results['stdout'])
+        self.assertIn("SyntaxError", results['stdout'])
 
     def test_error_in_check_code(self):
-        out, res = run_python("""a = 17""", """1'hello'""")
-        self.assertEqual("", out)
-        self.assertEqual(len(res), 1)
-        self.assertEqual(res[0][0], "ERROR")
-        self.assertIn("1'hello'", res[0][2])
-        self.assertIn("SyntaxError", res[0][2])
+        results = run_python("""a = 17""", """1'hello'""")
+        self.assertEqual("", results['stdout'])
+        checks = results['checks']
+        self.assertEqual(len(checks), 1)
+        self.assertEqual(checks[0][0], "ERROR")
+        self.assertIn("1'hello'", checks[0][2])
+        self.assertIn("SyntaxError", checks[0][2])
