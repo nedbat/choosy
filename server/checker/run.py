@@ -79,9 +79,9 @@ if USE_PYPY:
             print json.dumps([output, results])
             """)
         args = [
-            '--heapsize', '8m',     # 15m is about the minimum, but this is what I really want.
-            '-S',                   # Don't try to import the non-existent 'site' module
-            '-c', code,             # Run this code
+            '--heapsize', '8000000',    # 15m is about the minimum, but this is what I really want.
+            '-S',                       # Don't try to import the non-existent 'site' module
+            '-c', code,                 # Run this code
             ]
         sandproc = ChoosySandboxedProc(PYPY_SANDBOX, args, tmpdir='.', debug=False)
         #if timeout is not None:
