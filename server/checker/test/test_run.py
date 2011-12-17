@@ -2,6 +2,7 @@
 
 import os.path
 import sys
+import textwrap
 import unittest
 
 from checker.exerciser import Checker
@@ -71,6 +72,9 @@ class CheckerTest(unittest.TestCase):
 
 
 class RunPythonTest(unittest.TestCase):
+    def run_python_dedented(self, a, b):
+        return run_python(textwrap.dedent(a), textwrap.dedent(b))
+
     def test_output(self):
         results = run_python("""print 'hello!'""", "")
         self.assertEqual(results['stdout'], "hello!\n")
@@ -88,3 +92,23 @@ class RunPythonTest(unittest.TestCase):
         self.assertEqual(checks[0][0], "ERROR")
         self.assertIn("1'hello'", checks[0][2])
         self.assertIn("SyntaxError", checks[0][2])
+
+    def test_check_function(self):
+        results = self.run_python_dedented("""\
+            a = 17
+            print 'Hi there, dudes!'
+            """, """\
+            def check(t, c):
+                with c.expect("Your a is 17"):
+                    c.test(t.module.a == 17, "Your a is %r" % t.module.a)
+                with c.expect("You printed 'dudes'"):
+                    c.test('dudes' in t.stdout)
+                with c.expect("Your a is 34"):
+                    c.test(t.module.a == 34, "Your a is %r" % t.module.a)
+            """)
+        self.assertEqual(results['stdout'], "Hi there, dudes!\n")
+        self.assertEqual(results['checks'], [
+            ('OK', 'Your a is 17'),
+            ('OK', 'You printed \'dudes\''),
+            ('FAIL', 'Your a is 34', 'Your a is 17'),
+            ])

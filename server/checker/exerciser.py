@@ -99,6 +99,11 @@ class Checker(object):
                     self.fail("You returned %r" % actual_output)
 
 
+class Trial(object):
+    """One trial by the student to get the right answer."""
+    pass
+
+
 def run_exercise(tmpdir):
     """Run the student and teacher code.
 
@@ -117,7 +122,7 @@ def run_exercise(tmpdir):
         ]
 
     The first element of each tuple is a status ('OK', 'FAIL', or 'ERROR').
-    'OK' means the expectations was met, 'FAIL' means it wasn't met, and
+    'OK' means the expectation was met, 'FAIL' means it wasn't met, and
     'ERROR' means an exception was encountered.  The second element is the text
     of the `expect` call, what was expected.  A third element, if present, is
     what actually happened.
@@ -139,10 +144,13 @@ def run_exercise(tmpdir):
                 stdout.write(tb)
             else:
                 try:
+                    t = Trial()
+                    t.module = exercise
+                    t.stdout = stdout.getvalue()
                     c = Checker()
                     import check
                     try:
-                        check.check(exercise, stdout, c)
+                        check.check(t, c)
                     except c.Done:
                         pass
                     results['checks'] = c.results
