@@ -65,13 +65,13 @@ h1 {
 h2 {
     font-size: 120%;
 }
-.results p {
+.checks p {
     padding: .5em 1em;
 }
-.results p.OK {
+.checks p.OK {
     background: #cfc;
 }
-.results p.FAIL {
+.checks p.FAIL {
     background: #fcc;
 }
 #editor {
