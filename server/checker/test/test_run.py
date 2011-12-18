@@ -70,6 +70,65 @@ class CheckerTest(unittest.TestCase):
         self.assertEqual(c.results, [('ERROR', "Everything will be fine", "It wasn't fine!")])
         self.assertEqual(saw_exc, True)
 
+    def test_quiet_expects(self):
+        c = Checker()
+        with c.expect("It isn't even worth mentioning.", quiet=True):
+            pass
+        with c.expect("Let's talk about this."):
+            pass
+        self.assertEqual(c.results, [('OK', "Let's talk about this.")])
+
+
+class FunctionReturnsTest(unittest.TestCase):
+
+    def simple(self, x):
+        return x*2
+
+    def test_simple(self):
+        c = Checker()
+        c.function_returns(self, 'simple', [(1, 2), (2, 4)])
+        self.assertEqual(c.results, 
+            [('OK', 'simple(1) &rarr; 2'), ('OK', 'simple(2) &rarr; 4')]
+            )
+
+    def test_no_such_function(self):
+        c = Checker()
+        with self.assertRaises(Checker.Done):
+            c.function_returns(self, 'nothing', [(1, 2), (2, 4)])
+        self.assertEqual(c.results, 
+            [('FAIL', 'You should have a function named nothing', '')]
+            )
+
+    def test_not_callable(self):
+        c = Checker()
+        self.mylist = []
+        with self.assertRaises(Checker.Done):
+            c.function_returns(self, 'mylist', [(1, 2), (2, 4)])
+        self.assertEqual(c.results,
+            [('FAIL', 'You should have a function named mylist', '')]
+            )
+
+    def test_wrong_answers(self):
+        c = Checker()
+        c.function_returns(self, 'simple', [(1, 2), (2, 17), (3, 6)])
+        self.assertEqual(c.results,
+            [('OK', 'simple(1) &rarr; 2'),
+             ('FAIL', 'simple(2) &rarr; 17', 'You returned 4'),
+             ('OK', 'simple(3) &rarr; 6'),
+            ])
+
+    def add3(self, a, b, c):
+        return a + b + c
+
+    def test_multiple_arguments(self):
+        c = Checker()
+        c.function_returns(self, 'add3', [(1, 2, 3, 6), (1, 1, 1, 3), (10, 11, 12, 33)])
+        self.assertEqual(c.results,
+            [('OK', 'add3(1, 2, 3) &rarr; 6'),
+             ('OK', 'add3(1, 1, 1) &rarr; 3'),
+             ('OK', 'add3(10, 11, 12) &rarr; 33'),
+            ])
+
 
 class RunPythonTest(unittest.TestCase):
     def run_python_dedented(self, a, b):
