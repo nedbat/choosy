@@ -30,9 +30,10 @@
                               $(checks).append($("<pre class='ERROR'>" + res[2] + "</pre>"));
                           }
                           else {
-                              $(checks).append($("<p class='" + res[0] + "'>" + res[1] + "</p>"));
+                              var p = $("<p class='" + res[0] + "'>" + res[1] + "</p>");
+                              $(checks).append(p)
                               if (res[2]) {
-                                  $(checks).append($("<p>" + res[2] + "</p>"));
+                                  p.append($("<span class='whathappened'> &nbsp;" + res[2] + "</span>"));
                               }
                           }
                       });
