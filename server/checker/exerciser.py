@@ -24,12 +24,16 @@ class Checker(object):
     def __init__(self):
         self.results = []
 
-    def expect(self, desc, continue_on_fail=False, quiet=False):
+    def expect(self, desc, continue_on_fail=False, continue_on_error=False, quiet=False):
         """Declare an expectation.
 
         `desc` is the description of what is expected.
     
         If `continue_on_fail` is true, then a failure in this expectation 
+        won't end the check function, but will continue with the next 
+        expectation.
+
+        If `continue_on_error` is true, then an exception during execution 
         won't end the check function, but will continue with the next 
         expectation.
 
@@ -40,6 +44,7 @@ class Checker(object):
         """
         self.desc = desc
         self.continue_on_fail = continue_on_fail
+        self.continue_on_error = continue_on_error
         self.quiet = quiet
         return self
 
@@ -55,7 +60,7 @@ class Checker(object):
                 raise self.Done()
         elif exc_type:
             self.results.append(("ERROR", self.desc, "%s" % exc_value))
-            return False
+            return self.continue_on_error
         elif not self.quiet:
             self.results.append(("OK", self.desc))
 
@@ -93,7 +98,7 @@ class Checker(object):
         for in_out in in_outs:
             inputs, output = in_out[:-1], in_out[-1]
             nice_inputs = ", ".join("%r" % i for i in inputs)
-            with self.expect("%s(%s) &rarr; %r" % (fn_name, nice_inputs, output), continue_on_fail=True):
+            with self.expect("%s(%s) &rarr; %r" % (fn_name, nice_inputs, output), continue_on_fail=True, continue_on_error=True):
                 actual_output = fn(*inputs)
                 if actual_output != output:
                     self.fail("You returned %r" % actual_output)

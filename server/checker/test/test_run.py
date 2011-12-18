@@ -129,6 +129,23 @@ class FunctionReturnsTest(unittest.TestCase):
              ('OK', 'add3(10, 11, 12) &rarr; 33'),
             ])
 
+    class Flake(Exception):
+        pass
+
+    def flaky(self, x):
+        if x % 2:
+            raise self.Flake("Oops")
+        return x
+
+    def test_flaky_function(self):
+        c = Checker()
+        c.function_returns(self, 'flaky', [(2, 2), (3, 3), (4, 4)])
+        self.assertEqual(c.results,
+            [('OK', 'flaky(2) &rarr; 2'),
+             ('ERROR', "flaky(3) &rarr; 3", 'Oops'),
+             ('OK', 'flaky(4) &rarr; 4'),
+            ])
+
 
 class RunPythonTest(unittest.TestCase):
     def run_python_dedented(self, a, b):
