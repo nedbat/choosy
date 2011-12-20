@@ -9,7 +9,25 @@ from checker.exerciser import Checker
 from checker.run import run_python
 
 
-class CheckerTest(unittest.TestCase):
+class CheckerTestCase(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def clean_results(self, results):
+        """Remove often-changed data from the tracebacks in results."""
+        for d in results:
+            if 'exception' in d:
+                for frame in d['exception']['traceback']:
+                    frame['file'] = frame['file'].replace('\\', '/')
+                    frame['line'] = 0
+        return results
+
+
+class CheckerTest(CheckerTestCase):
     """Test the run.Checker context mananger class."""
 
     def test_success(self):
@@ -19,7 +37,9 @@ class CheckerTest(unittest.TestCase):
                 pass
         except Checker.Done:    # pragma: nocover
             self.fail("Shouldn't have raised Done here.")
-        self.assertEqual(c.results, [('OK', "This should work")])
+        self.assertEqual(c.results, [
+            {'status': 'OK', 'expect': "This should work"},
+            ])
 
     def test_failure(self):
         c = Checker()
@@ -30,7 +50,9 @@ class CheckerTest(unittest.TestCase):
             self.fail("We shouldn't have continued after a failed c.should")    # pragma: nocover
         except Checker.Done:
             pass
-        self.assertEqual(c.results, [('FAIL', "This should work", "It failed!")])
+        self.assertEqual(c.results, [
+            {'status':'FAIL', 'expect':"This should work", 'did':"It failed!"},
+            ])
 
     def test_failure_with_continue_on_fail(self):
         c = Checker()
@@ -42,7 +64,10 @@ class CheckerTest(unittest.TestCase):
                 pass
         except Checker.Done:    # pragma: nocover
             self.fail("Shouldn't have raised Done here.")
-        self.assertEqual(c.results, [('FAIL', "This should work", "It failed!"), ('OK', "Also this one")])
+        self.assertEqual(c.results, [
+            {'status':'FAIL', 'expect':"This should work", 'did':"It failed!"},
+            {'status':'OK', 'expect':"Also this one"},
+            ])
 
     def test_test(self):
         c = Checker()
@@ -53,22 +78,27 @@ class CheckerTest(unittest.TestCase):
                 raise Exception("Shouldn't have gotten to here")    # pragma: nocover
         except Checker.Done:
             pass
-        self.assertEqual(c.results, [('FAIL', "This should definitely work", "Oops, this was bad")])
+        self.assertEqual(c.results, [
+            {'status':'FAIL', 'expect':"This should definitely work", 'did':"Oops, this was bad"},
+            ])
 
     def test_error(self):
         class MyException(Exception): 
             pass
         c = Checker()
-        saw_exc = False
-        try:
+        with self.assertRaises(MyException):
             with c.expect("Everything will be fine"):
                 raise MyException("It wasn't fine!")
-        except Checker.Done:
-            raise Exception("Shouldn't get here")   # pragma: nocover
-        except MyException:
-            saw_exc = True
-        self.assertEqual(c.results, [('ERROR', "Everything will be fine", "It wasn't fine!")])
-        self.assertEqual(saw_exc, True)
+        self.assertEqual(self.clean_results(c.results), [
+            {'status':'ERROR', 'expect':"Everything will be fine", 'did':"It wasn't fine!",
+                'exception': {
+                    'type': "MyException",
+                    'message': "It wasn't fine!",
+                    'traceback': [
+                        {'file':'checker/test/test_run.py', 'line':0, 'function':'test_error', 'text':'raise MyException("It wasn\'t fine!")'},
+                        ]},
+                    },
+            ])
 
     def test_quiet_expects(self):
         c = Checker()
@@ -76,10 +106,12 @@ class CheckerTest(unittest.TestCase):
             pass
         with c.expect("Let's talk about this."):
             pass
-        self.assertEqual(c.results, [('OK', "Let's talk about this.")])
+        self.assertEqual(c.results, [
+            {'status':'OK', 'expect':"Let's talk about this."},
+            ])
 
 
-class FunctionReturnsTest(unittest.TestCase):
+class FunctionReturnsTest(CheckerTestCase):
 
     def simple(self, x):
         return x*2
@@ -87,34 +119,35 @@ class FunctionReturnsTest(unittest.TestCase):
     def test_simple(self):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 4)])
-        self.assertEqual(c.results, 
-            [('OK', 'simple(1) &rarr; 2'), ('OK', 'simple(2) &rarr; 4')]
-            )
+        self.assertEqual(c.results, [
+            {'status':'OK', 'expect':'simple(1) &rarr; 2'},
+            {'status':'OK', 'expect':'simple(2) &rarr; 4'},
+            ])
 
     def test_no_such_function(self):
         c = Checker()
         with self.assertRaises(Checker.Done):
             c.function_returns(self, 'nothing', [(1, 2), (2, 4)])
-        self.assertEqual(c.results, 
-            [('FAIL', 'You should have a function named nothing', '')]
-            )
+        self.assertEqual(c.results, [ 
+            {'status':'FAIL', 'expect':'You should have a function named nothing'},
+            ])
 
     def test_not_callable(self):
         c = Checker()
         self.mylist = []
         with self.assertRaises(Checker.Done):
             c.function_returns(self, 'mylist', [(1, 2), (2, 4)])
-        self.assertEqual(c.results,
-            [('FAIL', 'You should have a function named mylist', '')]
-            )
+        self.assertEqual(c.results, [
+            {'status':'FAIL', 'expect':'You should have a function named mylist'},
+            ])
 
     def test_wrong_answers(self):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 17), (3, 6)])
-        self.assertEqual(c.results,
-            [('OK', 'simple(1) &rarr; 2'),
-             ('FAIL', 'simple(2) &rarr; 17', 'You returned 4'),
-             ('OK', 'simple(3) &rarr; 6'),
+        self.assertEqual(c.results, [
+            {'status':'OK', 'expect':'simple(1) &rarr; 2'},
+            {'status':'FAIL', 'expect':'simple(2) &rarr; 17', 'did':'You returned 4'},
+            {'status':'OK', 'expect':'simple(3) &rarr; 6'},
             ])
 
     def add3(self, a, b, c):
@@ -123,10 +156,10 @@ class FunctionReturnsTest(unittest.TestCase):
     def test_multiple_arguments(self):
         c = Checker()
         c.function_returns(self, 'add3', [(1, 2, 3, 6), (1, 1, 1, 3), (10, 11, 12, 33)])
-        self.assertEqual(c.results,
-            [('OK', 'add3(1, 2, 3) &rarr; 6'),
-             ('OK', 'add3(1, 1, 1) &rarr; 3'),
-             ('OK', 'add3(10, 11, 12) &rarr; 33'),
+        self.assertEqual(c.results, [
+            {'status':'OK', 'expect':'add3(1, 2, 3) &rarr; 6'},
+            {'status':'OK', 'expect':'add3(1, 1, 1) &rarr; 3'},
+            {'status':'OK', 'expect':'add3(10, 11, 12) &rarr; 33'},
             ])
 
     class Flake(Exception):
@@ -140,14 +173,22 @@ class FunctionReturnsTest(unittest.TestCase):
     def test_flaky_function(self):
         c = Checker()
         c.function_returns(self, 'flaky', [(2, 2), (3, 3), (4, 4)])
-        self.assertEqual(c.results,
-            [('OK', 'flaky(2) &rarr; 2'),
-             ('ERROR', "flaky(3) &rarr; 3", 'Oops'),
-             ('OK', 'flaky(4) &rarr; 4'),
+        self.assertEqual(self.clean_results(c.results), [
+            {'status':'OK', 'expect':'flaky(2) &rarr; 2'},
+            {'status':'ERROR', 'expect':"flaky(3) &rarr; 3", 'did':'Oops',
+                'exception': {
+                    'type': 'Flake',
+                    'message': 'Oops',
+                    'traceback': [
+                        {'file':'checker/exerciser.py', 'line':0, 'function':'function_returns', 'text':'actual_output = fn(*inputs)'},
+                        {'file':'checker/test/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
+                        ]},
+                    },
+            {'status':'OK', 'expect':'flaky(4) &rarr; 4'},
             ])
 
 
-class RunPythonTest(unittest.TestCase):
+class RunPythonTest(CheckerTestCase):
     def run_python_dedented(self, a, b):
         return run_python(textwrap.dedent(a), textwrap.dedent(b))
 
@@ -161,13 +202,22 @@ class RunPythonTest(unittest.TestCase):
         self.assertIn("SyntaxError", results['stdout'])
 
     def test_error_in_check_code(self):
+        results = run_python("""a = 17""", """b = 1/0""")
+        self.assertEqual("", results['stdout'])
+        checks = results['checks']
+        self.assertEqual(len(checks), 1)
+        self.assertEqual(checks[0]['status'], "ERROR")
+        self.assertEqual("ZeroDivisionError", checks[0]['exception']['type'])
+        self.assertEqual("b = 1/0", checks[0]['exception']['traceback'][-1]['text'])
+
+    def test_syntaxerror_in_check_code(self):
         results = run_python("""a = 17""", """1'hello'""")
         self.assertEqual("", results['stdout'])
         checks = results['checks']
         self.assertEqual(len(checks), 1)
-        self.assertEqual(checks[0][0], "ERROR")
-        self.assertIn("1'hello'", checks[0][2])
-        self.assertIn("SyntaxError", checks[0][2])
+        self.assertEqual(checks[0]['status'], "ERROR")
+        self.assertEqual("SyntaxError", checks[0]['exception']['type'])
+        self.assertIn("1'hello'", checks[0]['exception'])
 
     def test_check_function(self):
         results = self.run_python_dedented("""\
@@ -184,7 +234,7 @@ class RunPythonTest(unittest.TestCase):
             """)
         self.assertEqual(results['stdout'], "Hi there, dudes!\n")
         self.assertEqual(results['checks'], [
-            ('OK', 'Your a is 17'),
-            ('OK', 'You printed \'dudes\''),
-            ('FAIL', 'Your a is 34', 'Your a is 17'),
+            {'status':'OK', 'expect':'Your a is 17'},
+            {'status':'OK', 'expect':'You printed \'dudes\''},
+            {'status':'FAIL', 'expect':'Your a is 34', 'did':'Your a is 17'},
             ])

@@ -53,16 +53,36 @@ class Checker(object):
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type is self.Failure:
-            self.results.append(("FAIL", self.desc, "%s" % exc_value))
+            self.add_result("FAIL", expect=self.desc, did=str(exc_value))
             if self.continue_on_fail:
                 return True
             else:
                 raise self.Done()
         elif exc_type:
-            self.results.append(("ERROR", self.desc, "%s" % exc_value))
+            self.add_result("ERROR", expect=self.desc, did=str(exc_value), exc=(exc_type, exc_value, exc_tb))
             return self.continue_on_error
         elif not self.quiet:
-            self.results.append(("OK", self.desc))
+            self.add_result("OK", expect=self.desc)
+
+    def add_result(self, status, expect=None, did=None, exc=None):
+        """Add a result."""
+        d = { 'status': status }
+        if expect:
+            d['expect'] = expect
+        if did:
+            d['did'] = did
+        if exc:
+            exc_type, exc_value, exc_tb = exc
+            tb = [
+                {'file':f, 'line':l, 'function':fn, 'text':t} 
+                for f, l, fn, t in traceback.extract_tb(exc_tb)
+                ]
+            d['exception'] = {
+                'type': exc_type.__name__, 
+                'message': str(exc_value),
+                'traceback': tb,
+                }
+        self.results.append(d)
 
     def fail(self, message=""):
         """Fail an expectation with a `message` to the user."""
@@ -119,31 +139,31 @@ def run_exercise(tmpdir):
 
     results['stdout'] is the stdout of the exercise.
 
-    results['checks'] is a list of tuples::
+    results['checks'] is a list of dicts::
     
         [
-            ('OK', 'You should have a variable named a'),
-            ('FAIL', 'a should equal 17', 'Your a equals 43'),
+            {'status':'OK', 'expect':'You should have a variable named a'),
+            {'status':'FAIL', 'expect':'a should equal 17', 'did':'Your a equals 43'},
         ]
 
-    The first element of each tuple is a status ('OK', 'FAIL', or 'ERROR').
-    'OK' means the expectation was met, 'FAIL' means it wasn't met, and
-    'ERROR' means an exception was encountered.  The second element is the text
-    of the `expect` call, what was expected.  A third element, if present, is
-    what actually happened.
+    `status` is one of 'OK', 'FAIL', or 'ERROR'.  'OK' means the expectation 
+    was met, 'FAIL' means it wasn't met, and 'ERROR' means an exception was
+    encountered.  `expect` is the text of the `expect` call, what was expected.
+    `did` is a message about what actually happened.  `traceback` is a list of
+    tuples, the traceback, if any, in the form produced by `traceback.extract_tb`.
 
     """
     results = {'stdout': '', 'checks': []}
-
     with patchattr(sys, 'stdout', StringIO()) as stdout, \
         patchattr(sys, 'path', ['.']+sys.path):
         with isolated_modules():
+            c = None
             try:
                 import exercise
             except SystemExit:
                 # The user code called sys.exit(), it's ok.
                 pass
-            except Exception as e:
+            except Exception:
                 tb = traceback.format_exc()
                 tb = tb.replace(tmpdir + os.sep, "")
                 stdout.write(tb)
@@ -158,12 +178,12 @@ def run_exercise(tmpdir):
                         check.check(t, c)
                     except c.Done:
                         pass
-                    results['checks'] = c.results
-                except Exception as e:
+                except Exception:
                     # Something went wrong in the checking code.
-                    tb = traceback.format_exc()
-                    results['checks'] = [('ERROR', '', tb)]
+                    c.add_result('ERROR', exc=sys.exc_info())
             finally:
                 results['stdout'] = stdout.getvalue()
+                if c:
+                    results['checks'] = c.results
 
     return results
