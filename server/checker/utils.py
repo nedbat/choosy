@@ -51,5 +51,7 @@ def change_dir(new_dir):
     """Changes directory in a with statement, then changes back."""
     old_dir = os.getcwd()
     os.chdir(new_dir)
-    yield
-    os.chdir(old_dir)
+    try:
+        yield
+    finally:
+        os.chdir(old_dir)

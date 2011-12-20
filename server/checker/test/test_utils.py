@@ -4,7 +4,7 @@ import os.path
 import sys
 import unittest
 
-from checker.utils import patchattr, isolated_modules, tempdir
+from checker.utils import patchattr, isolated_modules, tempdir, change_dir
 
 class Generic(object):
     """An object we can use generically in tests."""
@@ -85,4 +85,28 @@ class TempDirTest(unittest.TestCase):
         except ValueError:
             pass
         assert not os.path.exists(td)
+
+
+class ChangeDirTest(unittest.TestCase):
+    def test_changedir(self):
+        then = os.getcwd()
+        with tempdir(prefix="test_changedir") as td:
+            with change_dir(td):
+                here = os.getcwd()
+                self.assertNotEqual(then, here)
+        now = os.getcwd()
+        self.assertEqual(now, then)
+
+    def test_changedir_with_exception(self):
+        then = os.getcwd()
+        with tempdir(prefix="test_changedir") as td:
+            try:
+                with change_dir(td):
+                    here = os.getcwd()
+                    self.assertNotEqual(then, here)
+                    raise ValueError("No way!")
+            except ValueError:
+                pass
+        now = os.getcwd()
+        self.assertEqual(now, then)
 
