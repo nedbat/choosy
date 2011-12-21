@@ -75,13 +75,19 @@ class Checker(object):
             exc_type, exc_value, exc_tb = exc
             tb = [
                 {'file':f, 'line':l, 'function':fn, 'text':t} 
-                for f, l, fn, t in traceback.extract_tb(exc_tb)
+                    for f, l, fn, t in traceback.extract_tb(exc_tb)
                 ]
+            msg = str(exc_value)
             d['exception'] = {
                 'type': exc_type.__name__, 
-                'message': str(exc_value),
+                'message': msg,
                 'traceback': tb,
                 }
+            args = exc_value.args
+            if isinstance(args, tuple) and len(args) == 1 and args[0] == msg:
+                args = None
+            if args is not None:
+                d['exception']['args'] = args
         self.results.append(d)
 
     def fail(self, message=""):

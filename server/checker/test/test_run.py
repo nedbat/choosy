@@ -217,7 +217,8 @@ class RunPythonTest(CheckerTestCase):
         self.assertEqual(len(checks), 1)
         self.assertEqual(checks[0]['status'], "ERROR")
         self.assertEqual("SyntaxError", checks[0]['exception']['type'])
-        self.assertIn("1'hello'", checks[0]['exception'])
+        self.assertEqual('invalid syntax', checks[0]['exception']['args'][0])
+        self.assertEqual((1, 8, "1'hello'\n"), checks[0]['exception']['args'][1][1:])
 
     def test_check_function(self):
         results = self.run_python_dedented("""\
