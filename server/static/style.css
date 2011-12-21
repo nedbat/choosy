@@ -74,8 +74,9 @@ h2 {
 .checks p.FAIL {
     background: #fcc;
 }
-.checks p .whathappened {
+.checks p .did {
     font-style: italic;
+    margin-left: 2em;
 }
 #editor {
     font-size: 120%;
