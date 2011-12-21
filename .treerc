@@ -2,3 +2,6 @@
 ignore = 
  *.pyc
  *.db
+ htmlcov
+ srvstat
+ tiny_mce

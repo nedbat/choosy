@@ -124,7 +124,7 @@ class Checker(object):
         for in_out in in_outs:
             inputs, output = in_out[:-1], in_out[-1]
             nice_inputs = ", ".join("%r" % i for i in inputs)
-            with self.expect("%s(%s) &rarr; %r" % (fn_name, nice_inputs, output), continue_on_fail=True, continue_on_error=True):
+            with self.expect("%s(%s) should return %r" % (fn_name, nice_inputs, output), continue_on_fail=True, continue_on_error=True):
                 actual_output = fn(*inputs)
                 if actual_output != output:
                     self.fail("You returned %r" % actual_output)

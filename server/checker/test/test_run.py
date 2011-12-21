@@ -120,8 +120,8 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 4)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'simple(1) &rarr; 2'},
-            {'status':'OK', 'expect':'simple(2) &rarr; 4'},
+            {'status':'OK', 'expect':'simple(1) should return 2'},
+            {'status':'OK', 'expect':'simple(2) should return 4'},
             ])
 
     def test_no_such_function(self):
@@ -145,9 +145,9 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 17), (3, 6)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'simple(1) &rarr; 2'},
-            {'status':'FAIL', 'expect':'simple(2) &rarr; 17', 'did':'You returned 4'},
-            {'status':'OK', 'expect':'simple(3) &rarr; 6'},
+            {'status':'OK', 'expect':'simple(1) should return 2'},
+            {'status':'FAIL', 'expect':'simple(2) should return 17', 'did':'You returned 4'},
+            {'status':'OK', 'expect':'simple(3) should return 6'},
             ])
 
     def add3(self, a, b, c):
@@ -157,9 +157,9 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'add3', [(1, 2, 3, 6), (1, 1, 1, 3), (10, 11, 12, 33)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'add3(1, 2, 3) &rarr; 6'},
-            {'status':'OK', 'expect':'add3(1, 1, 1) &rarr; 3'},
-            {'status':'OK', 'expect':'add3(10, 11, 12) &rarr; 33'},
+            {'status':'OK', 'expect':'add3(1, 2, 3) should return 6'},
+            {'status':'OK', 'expect':'add3(1, 1, 1) should return 3'},
+            {'status':'OK', 'expect':'add3(10, 11, 12) should return 33'},
             ])
 
     class Flake(Exception):
@@ -174,8 +174,8 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'flaky', [(2, 2), (3, 3), (4, 4)])
         self.assertEqual(self.clean_results(c.results), [
-            {'status':'OK', 'expect':'flaky(2) &rarr; 2'},
-            {'status':'ERROR', 'expect':"flaky(3) &rarr; 3", 'did':'Oops',
+            {'status':'OK', 'expect':'flaky(2) should return 2'},
+            {'status':'ERROR', 'expect':"flaky(3) should return 3", 'did':'Oops',
                 'exception': {
                     'type': 'Flake',
                     'message': 'Oops',
@@ -184,7 +184,7 @@ class FunctionReturnsTest(CheckerTestCase):
                         {'file':'checker/test/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
                         ]},
                     },
-            {'status':'OK', 'expect':'flaky(4) &rarr; 4'},
+            {'status':'OK', 'expect':'flaky(4) should return 4'},
             ])
 
 

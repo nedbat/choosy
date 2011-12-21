@@ -27,13 +27,13 @@
                       $(stdout).val(obj.stdout);
                       $(obj.checks).each( function(i, res) {
                           if (res.status === "ERROR") {
-                              $(checks).append($("<pre class='ERROR'>" + res.did + "</pre>"));
+                              $(checks).append($("<pre class='ERROR'>").text(res.did));
                           }
                           else {
-                              var p = $("<p class='" + res.status + "'>" + res.expect + "</p>");
+                              var p = $("<p class='" + res.status + "'>").text(res.expect);
                               $(checks).append(p)
                               if (res.did) {
-                                  p.append($("<span class='did'>" + res.did + "</span>"));
+                                  p.append($("<span class='did'>").text(res.did));
                               }
                           }
                       });
