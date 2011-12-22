@@ -22,7 +22,7 @@ class CheckerTestCase(unittest.TestCase):
         for d in results:
             if 'exception' in d:
                 for frame in d['exception']['traceback']:
-                    frame['file'] = frame['file'].replace('\\', '/')
+                    frame['file'] = os.path.relpath(frame['file']).replace('\\', '/')
                     frame['line'] = 0
         return results
 
