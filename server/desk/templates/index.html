@@ -1,12 +1,15 @@
 {% extends "site/templates/base.html" %}
 
 {% block main %}
+
 <h1>Your Exercises</h1>
-<p><a href='{% url new_exercise %}'>Create an exercise</a></p>
-<p>Edit an exercise:</p>
+{% if exes %}
 <ul>
     {% for ex in exes %}
-    <li><a href='{% url edit_exercise ex.id %}'>{{ex}}</a></li>
+    <li><a href='{% url show_exercise ex.id %}'>{{ex}}</a></li>
     {% endfor %}
 </ul>
+{% endif %}
+<p><a href='{% url new_exercise %}'>Create an exercise</a></p>
+
 {% endblock main %}

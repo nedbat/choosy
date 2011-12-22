@@ -1,0 +1,12 @@
+{% extends "site/templates/base.html" %}
+
+{% block main %}
+
+<h1>Exercise: {{ ex.name }}</h1>
+<div>{{ ex.text|safe }}</div>
+<p>&nbsp;</p>
+<hr/>
+<pre>{{ ex.check }}</pre>
+<p><a href='{% url edit_exercise ex.id %}'>Edit</a></p>
+{% endblock main %}
+

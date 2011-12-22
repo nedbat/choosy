@@ -10,6 +10,12 @@ def index(request):
     exes = Exercise.objects.all()
     return render_to_response('desk/templates/index.html', {'exes': exes})
 
+def show(request, exid):
+    exercise = get_object_or_404(Exercise, pk=exid)
+    ctx = RequestContext(request)
+    ctx['ex'] = exercise
+    return render_to_response('desk/templates/show_exercise.html', ctx)
+
 def edit(request, exid=None):
     if exid:
         exercise = get_object_or_404(Exercise, pk=exid)
@@ -17,8 +23,8 @@ def edit(request, exid=None):
         exercise = None
     form = ExerciseForm(request.POST or None, instance=exercise)
     if form.is_valid():
-        model = form.save()
-        return redirect(index)
+        exercise = form.save()
+        return redirect('show_exercise', exercise.id)
 
     ctx = RequestContext(request)
     ctx['form'] = form
