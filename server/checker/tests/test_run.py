@@ -8,7 +8,6 @@ import unittest
 from checker.exerciser import Checker
 from checker.run import run_python
 
-#from django.test import TestCase
 
 class CheckerTestCase(unittest.TestCase):
 
