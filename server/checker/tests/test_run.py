@@ -8,6 +8,7 @@ import unittest
 from checker.exerciser import Checker
 from checker.run import run_python
 
+#from django.test import TestCase
 
 class CheckerTestCase(unittest.TestCase):
 
@@ -95,7 +96,7 @@ class CheckerTest(CheckerTestCase):
                     'type': "MyException",
                     'message': "It wasn't fine!",
                     'traceback': [
-                        {'file':'checker/test/test_run.py', 'line':0, 'function':'test_error', 'text':'raise MyException("It wasn\'t fine!")'},
+                        {'file':'checker/tests/test_run.py', 'line':0, 'function':'test_error', 'text':'raise MyException("It wasn\'t fine!")'},
                         ]},
                     },
             ])
@@ -181,7 +182,7 @@ class FunctionReturnsTest(CheckerTestCase):
                     'message': 'Oops',
                     'traceback': [
                         {'file':'checker/exerciser.py', 'line':0, 'function':'function_returns', 'text':'actual_output = fn(*inputs)'},
-                        {'file':'checker/test/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
+                        {'file':'checker/tests/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
                         ]},
                     },
             {'status':'OK', 'expect':'flaky(4) should return 4'},
