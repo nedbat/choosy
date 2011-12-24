@@ -11,4 +11,4 @@ class Exercise(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('show_exercise', [str(self.id), slugify(self.name)])
+        return ('gym_show_exercise', [str(self.id), slugify(self.name)])

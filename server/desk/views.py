@@ -24,7 +24,7 @@ def edit(request, exid=None):
     form = ExerciseForm(request.POST or None, instance=exercise)
     if form.is_valid():
         exercise = form.save()
-        return redirect('show_exercise', exercise.id)
+        return redirect('desk_show_exercise', exercise.id)
 
     ctx = RequestContext(request)
     ctx['form'] = form
