@@ -29,3 +29,10 @@ def edit(request, exid=None):
     ctx = RequestContext(request)
     ctx['form'] = form
     return render_to_response('desk/templates/edit_exercise.html', ctx)
+
+def yaml(request, exid):
+    """Deliver the exercise as a YAML file."""
+    exercise = get_object_or_404(Exercise, pk=exid)
+    response = HttpResponse(exercise.as_yaml(), mimetype="text/yaml") 
+    response['Content-Disposition'] = 'attachment; filename=ex_%d.yaml' % exercise.id
+    return response

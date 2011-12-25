@@ -5,4 +5,5 @@ urlpatterns = patterns('desk.views',
     url(r'^(?P<exid>\d+)/$', 'show', name='desk_show_exercise'),
     url(r'^new/$', 'edit', name='new_exercise'),
     url(r'^(?P<exid>\d+)/edit/$', 'edit', name='edit_exercise'),
+    url(r'^(?P<exid>\d+)/yaml/$', 'yaml', name='yaml_exercise'),
 )
