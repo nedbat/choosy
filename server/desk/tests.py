@@ -4,7 +4,7 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 
 from util.test import ChoosyDjangoTestCase
-from gym.models import Exercise
+from desk.models import Exercise
 
 class SimpleTest(ChoosyDjangoTestCase):
     def test_nothing(self):

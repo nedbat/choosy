@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.http import require_POST
 
-from gym.models import Exercise
+from desk.models import Exercise
 from desk.forms import ExerciseForm
 
 def index(request):
