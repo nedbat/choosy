@@ -62,6 +62,11 @@
         <div class='widget'>{{ form.name }}</div>
       </div>
       <div class='field'>
+        {{ form.slug.errors }}
+        <label for="id_name">Slug</label>
+        <div class='widget'>{{ form.slug }}</div>
+      </div>
+      <div class='field'>
         {{ form.text.errors }}
         <label for="id_text">Text<div class="explain">Explanation of the problem</div></label>
         <div class='widget'>{{ form.text }}</div>

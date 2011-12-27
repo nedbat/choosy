@@ -15,13 +15,15 @@ class YamlTest(ChoosyDjangoTestCase):
 
     def setUp(self):
         self.ex = Exercise.objects.create(
+            slug="hello-world",
             name="Hello world",
             text="<p>This is the first\nexercise. Good luck!</p>\n",
             check="def check(t, c):\n  with c.expect('Should!'):\n    c.fail('Broke!')\n",
             )
         self.ex.save()
         self.yaml = textwrap.dedent("""\
-            name: Hello world
+            slug: "hello-world"
+            name: "Hello world"
             text: |
               <p>This is the first
               exercise. Good luck!</p>
@@ -36,6 +38,6 @@ class YamlTest(ChoosyDjangoTestCase):
 
     def test_through_view(self):
         client = Client()
-        response = client.get(reverse('yaml_exercise', args=[self.ex.id]))
+        response = client.get(reverse('yaml_exercise', args=[self.ex.slug]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, self.yaml)

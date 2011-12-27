@@ -6,7 +6,7 @@
 {% if exes %}
 <ul>
     {% for ex in exes %}
-    <li><a href='{% url desk_show_exercise ex.id %}'>{{ex}}</a></li>
+    <li><a href='{% url desk_show_exercise ex.slug %}'>{{ex}}</a></li>
     {% endfor %}
 </ul>
 {% endif %}

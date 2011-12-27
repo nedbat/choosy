@@ -1,9 +1,17 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+import yaml
+
 class Exercise(models.Model):
-    name = models.CharField(max_length=40)
+    """An exercise for a student to ponder."""
+    # The short url-able name for the exercise.
+    slug = models.CharField(max_length=80, db_index=True)
+    # The human-readable name for the exercise.
+    name = models.CharField(max_length=80)
+    # The HTML text of the problem, for the student to read.
     text = models.TextField()
+    # The Python code to check the student's answer.
     check = models.TextField()
 
     def __unicode__(self):
@@ -15,13 +23,27 @@ class Exercise(models.Model):
 
     def as_yaml(self):
         """Return a YAML string representing this exercise."""
-        # PyYaml probably has a way to do this, but I got lost in the docs.
-        yaml = []
-        yaml.append("name: %s\n" % self.name)
-        yaml.append("text: |\n")
-        for l in self.text.splitlines():
-            yaml.append("  %s\n" % l)
-        yaml.append("check: |\n")
-        for l in self.check.splitlines():
-            yaml.append("  %s\n" % l)
-        return "".join(yaml)
+        return yaml.dump(mapping([
+            ("slug", quoted(self.slug)),
+            ("name", quoted(self.name)),
+            ("text", literal(self.text)),
+            ("check", literal(self.check)),
+            ]))
+
+# Configure PyYaml
+
+class quoted(str): pass
+class literal(str): pass
+class mapping(list): pass
+
+yaml.add_representer(quoted,
+    lambda dumper, data: dumper.represent_scalar('tag:yaml.org,2002:str', data, style='"')
+    )
+
+yaml.add_representer(literal, 
+    lambda dumper, data: dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    )
+
+yaml.add_representer(mapping, 
+    lambda dumper, data: dumper.represent_dict(data)
+    )

@@ -7,6 +7,6 @@
 <p>&nbsp;</p>
 <hr/>
 <pre>{{ ex.check }}</pre>
-<p><a href='{% url edit_exercise ex.id %}'>Edit</a> | <a href='{% url yaml_exercise ex.id %}'>YAML</a></p>
+<p><a href='{% url edit_exercise ex.slug %}'>Edit</a> | <a href='{% url yaml_exercise ex.slug %}'>YAML</a></p>
 {% endblock main %}
 
