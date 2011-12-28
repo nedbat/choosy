@@ -1,0 +1,36 @@
+slug: "lists"
+name: "Lists"
+text: |
+    <p>Lists in Python can hold many values called elements.  You create them with square brackets and commas:</p>
+
+    <pre>my_list = [1, 2, 3, 99]</pre>
+
+    <p>Create a list called my_list here, make it have five numbers in it, some smaller than 10, and some larger than 10:</p>
+
+check: |
+    def check(t, c):
+
+        with c.expect("""You should have a list named "my_list"."""):
+            names = c.names(t.module)
+            c.test(names, 'You have no variables.')
+            if "my_list" not in names:
+                if len(names) > 1:
+                    c.fail('You have these variables: %s.' % (", ".join(sorted(names)),))
+                else:
+                    c.fail('You have this variable: %s' % names[0])
+            my_list = t.module.my_list
+            c.test(isinstance(my_list, list), 
+                "Your my_list isn't a list, instead it's %s" % type(my_list).__name__
+                )
+
+        with c.expect('''"my_list" should have 5 elements, all numbers.'''):
+            c.test(len(my_list) == 5, 'Your "my_list" has %d elements.' % len(my_list))
+            c.test(all(isinstance(x, int) for x in my_list),
+                "Your my_list has some non-number elements."
+                )
+
+        with c.expect('''There should be a number smaller than 10.'''):
+            c.test(any(x < 10 for x in my_list))
+
+        with c.expect('''There should be a number greater than 10.'''):
+            c.test(any(x > 10 for x in my_list))

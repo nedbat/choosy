@@ -1,0 +1,53 @@
+slug: "functions"
+name: "Functions"
+text: |
+    <p>Functions are created with the <b>def</b> keyword.  Here's a function that squares its argument:</p>
+
+    <pre>def square(x):
+        return x * x</pre>
+
+    <p>Define a function centered_average that
+    returns the "centered" average of an array of ints, which we'll say is the mean average of the values, 
+    except not counting the largest and smallest values in the array. 
+    Use int division to produce the final average. You may assume that the array is length 3 or more.</p>
+
+    <ul>
+        <li>centered_average([1, 2, 3, 4, 100]) &rarr; 3</li>
+        <li>centered_average([1, 1, 5, 5, 10, 8, 7]) &rarr; 5</li>
+        <li>centered_average([-10, -4, -2, -4, -2, 0]) &rarr; -3</li>
+    </ul>
+
+    <p>Note: I copied this exercise from CodingBat, not for distribution!</p>
+
+    <p>PS: if you want to see how this works without solving the exercise:</p>
+
+    <pre>
+    def centered_average(nums):
+        min = max = None
+        sum = 0
+        for n in nums:
+            if min is None or n < min:
+                min = n
+            if max is None or n > max:
+                max = n
+            sum += n
+        return (sum - min - max) / (len(nums)-2)
+    </pre>
+check: |
+    def check(t, c):
+        c.function_returns(t.module, "centered_average", [
+            ([1, 2, 3, 4, 100],         3),
+            ([1, 1, 5, 5, 10, 8, 7],    5),
+            ([-10, -4, -2, -4, -2, 0],  -3),
+            ([5, 3, 4, 6, 2],           4),
+            ([5, 3, 4, 0, 100],         4),
+            ([100, 0, 5, 3, 4],         4),
+            ([4, 0, 100],               4),
+            ([0, 2, 3, 4, 100],         3),
+            ([1, 1, 100],               1),
+            ([7, 7, 7],                 7),
+            ([1, 7, 8],                 7),
+            ([4, 4, 4, 4, 5],           4),
+            ([4, 4, 4, 1, 5],           4),
+            ([6, 4, 8, 12, 3],          6),
+            ])
