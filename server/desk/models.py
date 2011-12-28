@@ -38,7 +38,7 @@ class Exercise(models.Model):
             ("name", quoted(self.name)),
             ("text", literal(self.text)),
             ("check", literal(self.check)),
-            ]))
+            ]), indent=4)
 
 # Configure PyYaml
 

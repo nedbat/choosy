@@ -109,7 +109,7 @@ class Checker(object):
         call: the last value in the tuple is the expected return value if 
         all-but-the-last values in the tuple are passed to the function::
 
-            c.function_returns(exercise, 'square', [
+            c.function_returns(t.module, 'square', [
                 (1, 1),
                 (2, 4),
                 (10, 100),
@@ -117,17 +117,21 @@ class Checker(object):
                 ])
 
         """
-        with self.expect("""You should have a function named %s""" % fn_name, quiet=True):
+        with self.expect("""You should have a function named %s.""" % fn_name, quiet=True):
             fn = getattr(exercise, fn_name, None)
             if not fn or not callable(fn):
                 self.fail()
         for in_out in in_outs:
             inputs, output = in_out[:-1], in_out[-1]
             nice_inputs = ", ".join("%r" % i for i in inputs)
-            with self.expect("%s(%s) should return %r" % (fn_name, nice_inputs, output), continue_on_fail=True, continue_on_error=True):
+            with self.expect("%s(%s) should return %r." % (fn_name, nice_inputs, output), continue_on_fail=True, continue_on_error=True):
                 actual_output = fn(*inputs)
                 if actual_output != output:
-                    self.fail("You returned %r" % actual_output)
+                    self.fail("You returned %r." % actual_output)
+
+    def names(self, exercise):
+        """Return the user names defined in `exercise`, the module produced by the student."""
+        return [n for n in dir(exercise) if not n.startswith('_')]
 
 
 class Trial(object):

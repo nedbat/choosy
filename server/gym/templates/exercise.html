@@ -24,6 +24,9 @@
                       if (obj.stdout) {
                           $(stdout).show();
                       }
+                      else {
+                          $(stdout).hide();
+                      }
                       $(stdout).val(obj.stdout);
                       $(obj.checks).each( function(i, res) {
                           if (res.status === "ERROR") {
