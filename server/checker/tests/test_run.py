@@ -120,8 +120,8 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 4)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'simple(1) should return 2'},
-            {'status':'OK', 'expect':'simple(2) should return 4'},
+            {'status':'OK', 'expect':'simple(1) should return 2.'},
+            {'status':'OK', 'expect':'simple(2) should return 4.'},
             ])
 
     def test_no_such_function(self):
@@ -129,7 +129,7 @@ class FunctionReturnsTest(CheckerTestCase):
         with self.assertRaises(Checker.Done):
             c.function_returns(self, 'nothing', [(1, 2), (2, 4)])
         self.assertEqual(c.results, [ 
-            {'status':'FAIL', 'expect':'You should have a function named nothing'},
+            {'status':'FAIL', 'expect':'You should have a function named nothing.'},
             ])
 
     def test_not_callable(self):
@@ -138,16 +138,16 @@ class FunctionReturnsTest(CheckerTestCase):
         with self.assertRaises(Checker.Done):
             c.function_returns(self, 'mylist', [(1, 2), (2, 4)])
         self.assertEqual(c.results, [
-            {'status':'FAIL', 'expect':'You should have a function named mylist'},
+            {'status':'FAIL', 'expect':'You should have a function named mylist.'},
             ])
 
     def test_wrong_answers(self):
         c = Checker()
         c.function_returns(self, 'simple', [(1, 2), (2, 17), (3, 6)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'simple(1) should return 2'},
-            {'status':'FAIL', 'expect':'simple(2) should return 17', 'did':'You returned 4'},
-            {'status':'OK', 'expect':'simple(3) should return 6'},
+            {'status':'OK', 'expect':'simple(1) should return 2.'},
+            {'status':'FAIL', 'expect':'simple(2) should return 17.', 'did':'You returned 4.'},
+            {'status':'OK', 'expect':'simple(3) should return 6.'},
             ])
 
     def add3(self, a, b, c):
@@ -157,9 +157,9 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'add3', [(1, 2, 3, 6), (1, 1, 1, 3), (10, 11, 12, 33)])
         self.assertEqual(c.results, [
-            {'status':'OK', 'expect':'add3(1, 2, 3) should return 6'},
-            {'status':'OK', 'expect':'add3(1, 1, 1) should return 3'},
-            {'status':'OK', 'expect':'add3(10, 11, 12) should return 33'},
+            {'status':'OK', 'expect':'add3(1, 2, 3) should return 6.'},
+            {'status':'OK', 'expect':'add3(1, 1, 1) should return 3.'},
+            {'status':'OK', 'expect':'add3(10, 11, 12) should return 33.'},
             ])
 
     class Flake(Exception):
@@ -174,8 +174,8 @@ class FunctionReturnsTest(CheckerTestCase):
         c = Checker()
         c.function_returns(self, 'flaky', [(2, 2), (3, 3), (4, 4)])
         self.assertEqual(self.clean_results(c.results), [
-            {'status':'OK', 'expect':'flaky(2) should return 2'},
-            {'status':'ERROR', 'expect':"flaky(3) should return 3", 'did':'Oops',
+            {'status':'OK', 'expect':'flaky(2) should return 2.'},
+            {'status':'ERROR', 'expect':"flaky(3) should return 3.", 'did':'Oops',
                 'exception': {
                     'type': 'Flake',
                     'message': 'Oops',
@@ -184,7 +184,7 @@ class FunctionReturnsTest(CheckerTestCase):
                         {'file':'checker/tests/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
                         ]},
                     },
-            {'status':'OK', 'expect':'flaky(4) should return 4'},
+            {'status':'OK', 'expect':'flaky(4) should return 4.'},
             ])
 
 
@@ -219,6 +219,18 @@ class RunPythonTest(CheckerTestCase):
         self.assertEqual("SyntaxError", checks[0]['exception']['type'])
         self.assertEqual('invalid syntax', checks[0]['exception']['args'][0])
         self.assertEqual((1, 8, "1'hello'\n"), checks[0]['exception']['args'][1][1:])
+
+    def test_names(self):
+        results = self.run_python_dedented("""\
+            a = _a = __a = a_ = a__ = 1
+            """, """\
+            def check(t, c):
+                with c.expect("t.names() works."):
+                    c.test(t.names() == "__a _a a a_ a__".split(), repr(t.names()))
+            """)
+        self.assertEqual(results['checks'], [
+            {'status':'OK', 'expect':'t.names() works.'},
+            ])
 
     def test_check_function(self):
         results = self.run_python_dedented("""\

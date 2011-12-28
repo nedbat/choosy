@@ -7,7 +7,7 @@ text: |
 check: |
     def check(t, c):
         with c.expect("You should have a variable named y."):
-            names = c.names(t.module)
+            names = t.names()
             c.test(names, "You have no variables.")
             if 'y' not in names:
                 if len(names) == 1:

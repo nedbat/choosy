@@ -129,14 +129,16 @@ class Checker(object):
                 if actual_output != output:
                     self.fail("You returned %r." % actual_output)
 
-    def names(self, exercise):
-        """Return the user names defined in `exercise`, the module produced by the student."""
-        return [n for n in dir(exercise) if not n.startswith('_')]
-
 
 class Trial(object):
     """One trial by the student to get the right answer."""
-    pass
+    def __init__(self, module, stdout):
+        self.module = module
+        self.stdout = stdout
+
+    def names(self):
+        """Return the list of names defined by the user in the module."""
+        return [n for n in dir(self.module) if not (n.startswith('__') and n.endswith('__'))]
 
 
 def run_exercise(tmpdir):
@@ -179,9 +181,7 @@ def run_exercise(tmpdir):
                 stdout.write(tb)
             else:
                 try:
-                    t = Trial()
-                    t.module = exercise
-                    t.stdout = stdout.getvalue()
+                    t = Trial(module=exercise, stdout=stdout.getvalue())
                     c = Checker()
                     import check
                     try:

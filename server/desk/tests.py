@@ -25,12 +25,12 @@ class YamlTest(ChoosyDjangoTestCase):
             slug: "hello-world"
             name: "Hello world"
             text: |
-              <p>This is the first
-              exercise. Good luck!</p>
+                <p>This is the first
+                exercise. Good luck!</p>
             check: |
-              def check(t, c):
-                with c.expect('Should!'):
-                  c.fail('Broke!')
+                def check(t, c):
+                  with c.expect('Should!'):
+                    c.fail('Broke!')
             """)
 
     def test_direct(self):

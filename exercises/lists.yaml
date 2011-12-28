@@ -11,7 +11,7 @@ check: |
     def check(t, c):
 
         with c.expect("""You should have a list named "my_list"."""):
-            names = c.names(t.module)
+            names = t.names()
             c.test(names, 'You have no variables.')
             if "my_list" not in names:
                 if len(names) > 1:
