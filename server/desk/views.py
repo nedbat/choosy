@@ -2,13 +2,23 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.http import require_POST
+from django.forms import FileField, Form, ModelForm
 
 from desk.models import Exercise
 from desk.forms import ExerciseForm
 
+class ImportForm(Form):
+    yamlfile = FileField(
+        label='Select a YAML file',
+        help_text='Some Help'
+    )
+
 def index(request):
     exes = Exercise.objects.all()
-    return render_to_response('desk/templates/index.html', {'exes': exes})
+
+    ctx = RequestContext(request)
+    ctx['exes'] = exes
+    return render_to_response('desk/templates/index.html', ctx)
 
 def show(request, slug):
     exercise = get_object_or_404(Exercise, slug=slug)
@@ -29,6 +39,20 @@ def edit(request, slug=None):
     ctx = RequestContext(request)
     ctx['form'] = form
     return render_to_response('desk/templates/edit_exercise.html', ctx)
+
+def import_(request):
+    if request.method == "POST":
+        form = ImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_ex = Exercise.from_yaml(request.FILES['yamlfile'])
+            new_ex.save()
+            return redirect('desk_show_exercise', new_ex.slug)
+    else:
+        form = ImportForm()
+
+    ctx = RequestContext(request)
+    ctx['form'] = form
+    return render_to_response('desk/templates/import_exercise.html', ctx)
 
 def yaml(request, slug):
     """Deliver the exercise as a YAML file."""

@@ -1,0 +1,19 @@
+{% extends "site/templates/base.html" %}
+
+{% block main %}
+
+<h1>Import Exercise</h1>
+
+<p>You can import an exercise in YAML form:</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.yamlfile.help_text }}
+    {{ form.yamlfile.label_tag }}
+    {{ form.yamlfile.errors }}
+    {{ form.yamlfile }}
+    <input type="submit" value="Import" />
+</form>
+
+{% endblock main %}

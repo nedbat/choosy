@@ -21,6 +21,16 @@ class Exercise(models.Model):
     def get_absolute_url(self):
         return ('gym_show_exercise', [str(self.id), slugify(self.name)])
 
+    @classmethod
+    def from_yaml(cls, yaml_file):
+        """Create an Exercise from a YAML file."""
+        data = yaml.load(yaml_file)
+        ex, new = cls.objects.get_or_create(slug=data['slug'])
+        ex.name = data['name']
+        ex.text = data['text']
+        ex.check = data['check']
+        return ex
+
     def as_yaml(self):
         """Return a YAML string representing this exercise."""
         return yaml.dump(mapping([
