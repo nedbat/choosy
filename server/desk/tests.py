@@ -1,4 +1,5 @@
 import textwrap
+import StringIO
 
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -6,38 +7,66 @@ from django.core.urlresolvers import reverse
 from util.test import ChoosyDjangoTestCase
 from desk.models import Exercise
 
-class SimpleTest(ChoosyDjangoTestCase):
-    def test_nothing(self):
-        pass
 
+EX_SLUG = "hello-world"
+EX_NAME = "Hello world"
+EX_TEXT = "<p>This is the first\nexercise. Good luck!</p>\n"
+EX_CHECK = "def check(t, c):\n    with c.expect('Should!'):\n        c.fail('Broke!')\n"
 
-class YamlTest(ChoosyDjangoTestCase):
+EX_YAML = textwrap.dedent("""\
+    slug: "hello-world"
+    name: "Hello world"
+    text: |
+        <p>This is the first
+        exercise. Good luck!</p>
+    check: |
+        def check(t, c):
+            with c.expect('Should!'):
+                c.fail('Broke!')
+    """)
+
+class YamlImportTest(ChoosyDjangoTestCase):
 
     def setUp(self):
         self.ex = Exercise.objects.create(
-            slug="hello-world",
-            name="Hello world",
-            text="<p>This is the first\nexercise. Good luck!</p>\n",
-            check="def check(t, c):\n  with c.expect('Should!'):\n    c.fail('Broke!')\n",
+            slug=EX_SLUG,
+            name=EX_NAME,
+            text=EX_TEXT,
+            check=EX_CHECK,
             )
-        self.ex.save()
-        self.yaml = textwrap.dedent("""\
-            slug: "hello-world"
-            name: "Hello world"
-            text: |
-                <p>This is the first
-                exercise. Good luck!</p>
-            check: |
-                def check(t, c):
-                  with c.expect('Should!'):
-                    c.fail('Broke!')
-            """)
 
     def test_direct(self):
-        self.assertEqual(self.ex.as_yaml(), self.yaml)
+        self.assertEqual(self.ex.as_yaml(), EX_YAML)
 
-    def test_through_view(self):
+    def test_exporting_exercise(self):
         client = Client()
         response = client.get(reverse('yaml_exercise', args=[self.ex.slug]))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, self.yaml)
+        self.assertEqual(response.content, EX_YAML)
+
+class YamlExportTest(ChoosyDjangoTestCase):
+
+    def test_importing_exercise(self):
+        self.assertEqual(0, Exercise.objects.count())
+        client = Client()
+
+        # Visit the import page
+        response = client.get(reverse('import_exercise'))
+        self.assertEqual(response.status_code, 200)
+
+        # Post to the import page
+        yaml_file = StringIO.StringIO(EX_YAML)
+        yaml_file.name = "test_yaml.yaml"
+        response = client.post(reverse('import_exercise'), {'yamlfile': yaml_file}, follow=True) 
+        self.assertRedirects(response, reverse('desk_show_exercise', args=[EX_SLUG]))
+
+        ex = Exercise.objects.get(slug=EX_SLUG)
+        self.assertEqual(ex.name, EX_NAME)
+        self.assertEqual(ex.text, EX_TEXT)
+        self.assertEqual(ex.check, EX_CHECK)
+
+    def test_importing_badly(self):
+        client = Client()
+        response = client.post(reverse('import_exercise'), {}, follow=True) 
+        self.assertFormError(response, 'form', None, [])
+        self.assertFormError(response, 'form', 'yamlfile', ['This field is required.'])
