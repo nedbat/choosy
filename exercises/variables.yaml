@@ -13,7 +13,9 @@ check: |
                 if len(names) == 1:
                     c.fail("You have a variable named %s." % names[0])
                 else:
-                    c.fail("You have variables named %s." % ", ".join(names))
+                    c.fail("You have variables named %s." % (", ".join(names)))
         y = t.module.y
         with c.expect("y should be 13."):
             c.test(y == 13, "Your y is %r." % y)
+solution: |
+    y = 13

@@ -22,3 +22,4 @@ class ExerciseForm(ModelForm):
 
     text = MultilineTextField()
     check = MultilineTextField()
+    solution = MultilineTextField()

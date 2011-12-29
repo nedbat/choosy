@@ -12,6 +12,7 @@ EX_SLUG = "hello-world"
 EX_NAME = "Hello world"
 EX_TEXT = "<p>This is the first\nexercise. Good luck!</p>\n"
 EX_CHECK = "def check(t, c):\n    with c.expect('Should!'):\n        c.fail('Broke!')\n"
+EX_SOLUTION = "x = 12\ny = 13\n"
 
 EX_YAML = textwrap.dedent("""\
     slug: "hello-world"
@@ -23,6 +24,9 @@ EX_YAML = textwrap.dedent("""\
         def check(t, c):
             with c.expect('Should!'):
                 c.fail('Broke!')
+    solution: |
+        x = 12
+        y = 13
     """)
 
 class YamlImportTest(ChoosyDjangoTestCase):
@@ -33,6 +37,7 @@ class YamlImportTest(ChoosyDjangoTestCase):
             name=EX_NAME,
             text=EX_TEXT,
             check=EX_CHECK,
+            solution=EX_SOLUTION,
             )
 
     def test_direct(self):
@@ -64,6 +69,7 @@ class YamlExportTest(ChoosyDjangoTestCase):
         self.assertEqual(ex.name, EX_NAME)
         self.assertEqual(ex.text, EX_TEXT)
         self.assertEqual(ex.check, EX_CHECK)
+        self.assertEqual(ex.solution, EX_SOLUTION)
 
     def test_importing_badly(self):
         client = Client()

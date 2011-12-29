@@ -13,6 +13,9 @@ class Exercise(models.Model):
     text = models.TextField()
     # The Python code to check the student's answer.
     check = models.TextField()
+    # A solution to the exercise.  This is used for testing the exercise.
+    # Maybe we'll also make it available to the student?
+    solution = models.TextField()
 
     def __unicode__(self):
         return self.name
@@ -29,6 +32,7 @@ class Exercise(models.Model):
         ex.name = data['name']
         ex.text = data['text']
         ex.check = data['check']
+        ex.solution = data.get('solution', '')
         return ex
 
     def as_yaml(self):
@@ -38,6 +42,7 @@ class Exercise(models.Model):
             ("name", quoted(self.name)),
             ("text", literal(self.text)),
             ("check", literal(self.check)),
+            ("solution", literal(self.solution)),
             ]), indent=4)
 
 # Configure PyYaml

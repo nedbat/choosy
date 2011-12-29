@@ -22,6 +22,17 @@
                     tabMode: "shift",
                     indentUnit: 4
                     });
+                choosepython.codemirror = CodeMirror.fromTextArea($("#id_solution")[0], {
+                    mode: {
+                        name: "python",
+                        version: 2,
+                        singleLineStringErrors: true
+                        },
+                    theme: "eclipse",
+                    lineNumbers: true,
+                    tabMode: "shift",
+                    indentUnit: 4
+                    });
             });
         </script>
 <script language="javascript" type="text/javascript" src="/static/tiny_mce/tiny_mce.js"></script>
@@ -76,6 +87,12 @@
         <label for="id_check">Check<div class="explain">Code you provide to check the student's answer</div></label>
         <div class='widget'>{{ form.check }}</div>
       </div>
+      <div class='field'>
+        {{ form.solution.errors }}
+        <label for="id_solution">Solution<div class="explain">A solution to the exercise</div></label>
+        <div class='widget'>{{ form.solution }}</div>
+      </div>
+
       <div class='field'>
         <div class='widget'><input type="submit" value="Save" /></div>
       </div>

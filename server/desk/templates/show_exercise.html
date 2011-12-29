@@ -1,5 +1,7 @@
 {% extends "site/templates/base.html" %}
 
+{% block title %}Exercise: {{ ex.name }}{% endblock %}
+
 {% block main %}
 
 <h1>Exercise: {{ ex.name }}</h1>
@@ -7,6 +9,8 @@
 <p>&nbsp;</p>
 <hr/>
 <pre>{{ ex.check }}</pre>
+<hr/>
+<pre>{{ ex.solution }}</pre>
 <p><a href='{% url edit_exercise ex.slug %}'>Edit</a> | <a href='{% url yaml_exercise ex.slug %}'>YAML</a></p>
-{% endblock main %}
 
+{% endblock main %}
