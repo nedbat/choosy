@@ -54,6 +54,26 @@ var choosy = {
         });
     },
 
+    // make_html_editor: turn textareas into TinyMCE html editors.
+    make_html_editor: function(id) {
+        tinyMCE.init({
+            theme: "advanced",
+            mode: "exact",
+            elements: id,
+            content_css: "/static/style.css",
+            theme_advanced_toolbar_location: "top",
+            theme_advanced_buttons1: "cut,copy,paste,|,"
+                + "bold,italic,underline,|,"
+                + "bullist,numlist,"
+                + "link,unlink,|,"
+                + "undo,redo,cleanup,code,charmap",
+            theme_advanced_buttons2: "",
+            theme_advanced_buttons3: "",
+            height:"350px",
+            width:"100%"
+        });
+    },
+
     // make_py_editor: turn textareas into CodeMirror text editors.
     make_py_editor: function(elts) {
         elts.each(function(i, elt) {
