@@ -27,7 +27,7 @@ def run(request, exid=None):
     else:
         check_code = request.POST.get('check', '')
     if not check_code:
-        raise Exception("No check code to run")
+        return HttpResponse("No check code to run", status=400)
     results = run_python(the_code, check_code)
     results['status'] = 'ok'
     return HttpResponse(json.dumps(results), mimetype="application/json")
