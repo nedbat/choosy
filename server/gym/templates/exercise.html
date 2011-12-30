@@ -11,10 +11,10 @@
   <script>
       $(function() {
           choosy.set_csrf_token("{{ csrf_token }}");
-          var codemirror = choosy.make_py_editor($("#editor"));
+          var code_editor = choosy.make_py_editor($("#editor"));
           $('.run_code').click(
               function(ev) {
-                  codemirror.save();
+                  code_editor.save();
                   var btn = ev.target;
                   var par = $(btn).parents(".exercise");
                   choosy.run_python("{{ ex.id }}", par.find(".code"), par.find(".stdout"), par.find(".checks"));
@@ -35,8 +35,7 @@
   <div class='exercise'>
     <textarea class='code' id='editor'></textarea>
     <p><input class='run_code' type='button' value='Run it'></input></p>
-    <textarea class='stdout' style='display:none' cols='80' rows='10'>
-    </textarea>
+    <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
     <div class='checks'></div>
   </div>
 {% endblock main %}

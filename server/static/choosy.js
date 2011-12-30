@@ -76,18 +76,16 @@ var choosy = {
 
     // make_py_editor: turn textareas into CodeMirror text editors.
     make_py_editor: function(elts) {
-        elts.each(function(i, elt) {
-            return CodeMirror.fromTextArea(elt, {
-                mode: {
-                    name: "python",
-                    version: 2,
-                    singleLineStringErrors: true
-                    },
-                theme: "eclipse",
-                lineNumbers: true,
-                tabMode: "shift",
-                indentUnit: 4
-                });
-        });
+        return CodeMirror.fromTextArea(elts[0], {
+            mode: {
+                name: "python",
+                version: 2,
+                singleLineStringErrors: true
+                },
+            theme: "eclipse",
+            lineNumbers: true,
+            tabMode: "shift",
+            indentUnit: 4
+            });
     }
 };
