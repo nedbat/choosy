@@ -5,71 +5,24 @@
   <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
   <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
   <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
   <link rel="stylesheet" href="/static/codemirror.css">
   <link rel="stylesheet" href="/static/eclipse.css">
   <script>
-      choosepython = {
-          run_python: function(test_name, code, stdout, checks) {
-              $(stdout).val("");
-              $(checks).html("");
-              $.ajax({
-                  type: "POST",
-                  dataType: "json",
-                  url: "/gym/run/{{ ex.id }}/",
-                  data: {
-                      code: $(code).val(),
-                      csrfmiddlewaretoken: "{{ csrf_token }}"
-                  },
-                  success: function(obj) {
-                      if (obj.stdout) {
-                          $(stdout).show();
-                      }
-                      else {
-                          $(stdout).hide();
-                      }
-                      $(stdout).val(obj.stdout);
-                      $(obj.checks).each( function(i, res) {
-                          if (res.status === "ERROR") {
-                              $(checks).append($("<pre class='ERROR'>").text(res.did));
-                          }
-                          else {
-                              var p = $("<p class='" + res.status + "'>").text(res.expect);
-                              $(checks).append(p)
-                              if (res.did) {
-                                  p.append($("<span class='did'>").text(res.did));
-                              }
-                          }
-                      });
-                  }
-              });
-          }
-      };
-
       $(function() {
-          choosepython.codemirror = CodeMirror.fromTextArea($("#editor")[0], {
-              mode: {
-                  name: "python",
-                  version: 2,
-                  singleLineStringErrors: true
-                  },
-              theme: "eclipse",
-              lineNumbers: true,
-              tabMode: "shift",
-              indentUnit: 4
-              });
-
+          choosy.set_csrf_token("{{ csrf_token }}");
+          var codemirror = choosy.make_py_editor($("#editor"));
           $('.run_code').click(
               function(ev) {
-                  choosepython.codemirror.save();
+                  codemirror.save();
                   var btn = ev.target;
                   var par = $(btn).parents(".exercise");
-                  var test_name = par.attr("id");
-                  choosepython.run_python(test_name, par.find(".code"), par.find(".stdout"), par.find(".checks"));
+                  choosy.run_python("{{ ex.id }}", par.find(".code"), par.find(".stdout"), par.find(".checks"));
               }
           );
           $('.highlight').click(
               function(ev) {
-                  choosepython.codemirror.setLineClass(2, "errorline");
+                  codemirror.setLineClass(2, "errorline");
               }
           );
       });

@@ -1,40 +1,18 @@
 {% extends "site/templates/base.html" %}
 {% block title %}Exercise: {{ form.instance.name }}{% endblock %}
 {% block head %}
-      <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
-      <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
-      <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
-      <link rel="stylesheet" href="/static/codemirror.css">
-      <link rel="stylesheet" href="/static/eclipse.css">
-        <script>
-            choosepython = {
-            };
-
-            $(function() {
-                choosepython.codemirror = CodeMirror.fromTextArea($("#id_check")[0], {
-                    mode: {
-                        name: "python",
-                        version: 2,
-                        singleLineStringErrors: true
-                        },
-                    theme: "eclipse",
-                    lineNumbers: true,
-                    tabMode: "shift",
-                    indentUnit: 4
-                    });
-                choosepython.codemirror = CodeMirror.fromTextArea($("#id_solution")[0], {
-                    mode: {
-                        name: "python",
-                        version: 2,
-                        singleLineStringErrors: true
-                        },
-                    theme: "eclipse",
-                    lineNumbers: true,
-                    tabMode: "shift",
-                    indentUnit: 4
-                    });
-            });
-        </script>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="/static/codemirror.css">
+  <link rel="stylesheet" href="/static/eclipse.css">
+  <script>
+  $(function() {
+      choosy.make_py_editor($("#id_check"));
+      choosy.make_py_editor($("#id_solution"));
+  });
+  </script>
 <script language="javascript" type="text/javascript" src="/static/tiny_mce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
   tinyMCE.init({
