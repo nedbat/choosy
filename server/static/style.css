@@ -68,16 +68,16 @@ h2 {
 ul { 
     font-size: 120%;
 }
-.checks p {
+.results p {
     padding: .5em 1em;
 }
-.checks p.OK {
+.results p.OK {
     background: #cfc;
 }
-.checks p.FAIL {
+.results p.FAIL {
     background: #fcc;
 }
-.checks p .did {
+.results p .did {
     font-style: italic;
     margin-left: 2em;
 }

@@ -7,10 +7,10 @@ var choosy = {
     },
 
     // run_python: run student's code, get the results, and display them.
-    run_python: function(exid, code, stdout, checks) {
+    run_python: function(exid, code, check, stdout, results) {
         // Clear the output areas.
         $(stdout).val("");
-        $(checks).html("");
+        $(results).html("");
 
         // Figure out where we're going to post to.
         var url = "/gym/run/";
@@ -18,13 +18,17 @@ var choosy = {
             url += exid + "/";
         }
 
+        var code = $(code).val() || "";
+        var check = $(check).val() || "";
+
         // The ajax call!
         $.ajax({
             type: "POST",
             dataType: "json",
             url: url,
             data: {
-                code: $(code).val(),
+                code: code,
+                check: check,
                 csrfmiddlewaretoken: choosy.csrf_token,
             },
             success: function(obj) {
@@ -40,11 +44,11 @@ var choosy = {
                 // Write the results into the results container.
                 $(obj.checks).each( function(i, res) {
                     if (res.status === "ERROR") {
-                        $(checks).append($("<pre class='ERROR'>").text(res.did));
+                        $(results).append($("<pre class='ERROR'>").text(res.did));
                     }
                     else {
                         var p = $("<p class='" + res.status + "'>").text(res.expect);
-                        $(checks).append(p)
+                        $(results).append(p)
                         if (res.did) {
                             p.append($("<span class='did'>").text(res.did));
                         }

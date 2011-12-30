@@ -17,7 +17,7 @@
                   code_editor.save();
                   var btn = ev.target;
                   var par = $(btn).parents(".exercise");
-                  choosy.run_python("{{ ex.id }}", par.find(".code"), par.find(".stdout"), par.find(".checks"));
+                  choosy.run_python("{{ ex.id }}", par.find(".code"), "", par.find(".stdout"), par.find(".results"));
               }
           );
           $('.highlight').click(
@@ -36,6 +36,6 @@
     <textarea class='code' id='editor'></textarea>
     <p><input class='run_code' type='button' value='Run it'></input></p>
     <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
-    <div class='checks'></div>
+    <div class='results'></div>
   </div>
 {% endblock main %}

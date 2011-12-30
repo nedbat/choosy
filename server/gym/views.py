@@ -19,10 +19,15 @@ def exercise(request, exid, slug):
     return render_to_response('gym/templates/exercise.html', ctx)
 
 @require_POST
-def run(request, exid):
-    ex = get_object_or_404(Exercise, pk=exid)
+def run(request, exid=None):
     the_code = request.POST.get('code')
-    check_code = ex.check
+    if exid:
+        ex = get_object_or_404(Exercise, pk=exid)
+        check_code = ex.check
+    else:
+        check_code = request.POST.get('check', '')
+    if not check_code:
+        raise Exception("No check code to run")
     results = run_python(the_code, check_code)
     results['status'] = 'ok'
     return HttpResponse(json.dumps(results), mimetype="application/json")

@@ -10,13 +10,18 @@
   <link rel="stylesheet" href="/static/eclipse.css">
   <script>
   $(function() {
+      choosy.set_csrf_token("{{ csrf_token }}");
       var check_editor = choosy.make_py_editor($("#id_check"));
       var solution_editor = choosy.make_py_editor($("#id_solution"));
       choosy.make_html_editor("id_text");
 
       $('.run_code').click(
           function(ev) {
-              alert("Hey!");
+              check_editor.save();
+              solution_editor.save();
+              var btn = ev.target;
+              var par = $(btn).parents(".exercise");
+              choosy.run_python("", $("#id_solution"), $("#id_check"), par.find(".stdout"), par.find(".results"));
           }
       );
   });
@@ -65,10 +70,13 @@
     </fieldset>
   </form>
 
-  <div class='field'>
-    <div class='widget'><input class='run_code' type="button" value="Test" /></div>
-  </div>
-  <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
-  <div class='checks'></div>
+  <hr>
 
+  <div class='exercise'>
+    <div class='field'>
+      <div class='widget'><input class='run_code' type="button" value="Test" /></div>
+      <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
+      <div class='results'></div>
+    </div>
+  </div>
 {% endblock main %}
