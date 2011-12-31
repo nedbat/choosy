@@ -25,9 +25,10 @@ class GymTest(ChoosyDjangoTestCase):
         self.assertEqual(response.context['ex'].id, 1)
 
     def test_show_dangerous_html(self):
-        response = self.client.post(reverse("gym_show_exercise", args=[3, 'functions']), {})
+        response = self.client.get(reverse("gym_show_exercise", args=[3, 'functions']), {})
         self.assertContains(response, "<p>This is fine, I'm sure:")
         self.assertNotContains(response, "danger")
+
 
 class GymRunTest(ChoosyDjangoTestCase):
 

@@ -24,7 +24,7 @@
 {% block main %}
 
 <h1>Exercise: {{ ex.name }}</h1>
-<div>{{ ex.text|clean_html }}</div>
+<div>{{ ex.text|clean_html|safe }}</div>
 <p>&nbsp;</p>
 <hr/>
 <pre>{{ ex.check }}</pre>

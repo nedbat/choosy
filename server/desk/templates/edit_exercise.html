@@ -1,5 +1,8 @@
 {% extends "choosy/templates/base.html" %}
+{% load choosy %}
+
 {% block title %}Exercise: {{ form.instance.name }}{% endblock %}
+
 {% block head %}
   <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
   <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
