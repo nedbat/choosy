@@ -1,6 +1,9 @@
 [run]
 branch = True
 source = .
+omit =
+    manage.py
+    debug/*.py
 
 [report]
 ignore_errors = True
