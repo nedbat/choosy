@@ -93,23 +93,39 @@ var choosy = {
                 + "undo,redo,cleanup,code,charmap",
             theme_advanced_buttons2: "",
             theme_advanced_buttons3: "",
-            height:"350px",
-            width:"100%"
+            height: "350px",
+            width: "100%"
         });
+    },
+
+    python_mode: {
+        name: "python",
+        version: 2,
+        singleLineStringErrors: true
     },
 
     // make_py_editor: turn textareas into CodeMirror text editors.
     make_py_editor: function(elts) {
         return CodeMirror.fromTextArea(elts[0], {
-            mode: {
-                name: "python",
-                version: 2,
-                singleLineStringErrors: true
-                },
+            mode: choosy.python_mode,
             theme: "eclipse",
             lineNumbers: true,
             tabMode: "shift",
             indentUnit: 4
-            });
+        });
+    },
+
+    // highlight_all_python: Syntax highlight all the <pre class="python"> 
+    // instances on the page.
+    highlight_all_python: function() {
+        $("pre.python").each(function() {
+            var pre = $(this);
+            CodeMirror.runMode(pre.text(), choosy.python_mode, pre[0]);
+            pre.addClass("cm-s-eclipse");
+        });
     }
 };
+
+$(function() {
+    choosy.highlight_all_python();
+});

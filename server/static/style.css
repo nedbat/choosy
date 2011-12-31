@@ -55,8 +55,10 @@ p, pre {
     font-size: 120%;
 }
 pre {
+    font-family: "Lucida Console", monospace;
     margin: 1em 3em;
-    padding: 1em 1em;
+    padding: .5em 1em;
+    border-radius: .3em;
     background: #eee;
 }
 h1 {

@@ -8,6 +8,8 @@
   <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
   <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
   <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="/static/codemirror.css">
+  <link rel="stylesheet" href="/static/eclipse.css">
   <script>
   $(function() {
       choosy.set_csrf_token("{{ csrf_token }}");
@@ -27,9 +29,9 @@
 <div>{{ ex.text|clean_html|safe }}</div>
 <p>&nbsp;</p>
 <hr/>
-<pre>{{ ex.check }}</pre>
+<pre class="python">{{ ex.check }}</pre>
 <hr/>
-<pre>{{ ex.solution }}</pre>
+<pre class="python">{{ ex.solution }}</pre>
 <p>
     <a href='{% url edit_exercise ex.slug %}'>Edit</a> | 
     <a href='{% url yaml_exercise ex.slug %}'>Export</a> |
