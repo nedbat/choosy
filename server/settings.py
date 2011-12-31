@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'checker',
     'desk',
     'gym',
+    'choosy',
 
     'django_nose',
 

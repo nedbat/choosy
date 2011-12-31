@@ -1,4 +1,5 @@
-{% extends "site/templates/base.html" %}
+{% extends "choosy/templates/base.html" %}
+{% load choosy %}
 
 {% block title %}Exercise: {{ ex.name }}{% endblock %}
 
@@ -23,7 +24,7 @@
 {% block main %}
 
 <h1>Exercise: {{ ex.name }}</h1>
-<div>{{ ex.text|safe }}</div>
+<div>{{ ex.text|clean_html }}</div>
 <p>&nbsp;</p>
 <hr/>
 <pre>{{ ex.check }}</pre>
