@@ -1,7 +1,7 @@
 from django.forms import ModelForm, CharField, Textarea
 from desk.models import Exercise
 
-from lxml.html.clean import Cleaner
+from util.html import clean_html
 
 
 class MultilineTextField(CharField):
@@ -23,7 +23,7 @@ class ParanoidHtmlField(MultilineTextField):
         super(ParanoidHtmlField, self).__init__(widget=ParanoidHtmlTextarea)
 
     def to_python(self, value):
-        value = Cleaner().clean_html(value)
+        value = clean_html(value)
         value = super(ParanoidHtmlField, self).to_python(value)
         return value
 
@@ -32,7 +32,7 @@ class ParanoidHtmlTextarea(Textarea):
     """A textarea for editing HTML when we don't trust the editor."""
     def render(self, name, value, attrs=None):
         if value:
-            value = Cleaner().clean_html(value)
+            value = clean_html(value)
         return super(ParanoidHtmlTextarea, self).render(name, value, attrs)
     
 

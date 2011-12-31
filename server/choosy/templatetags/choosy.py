@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
-from lxml.html.clean import Cleaner
+import util.html
 
 
 register = template.Library()
@@ -10,6 +10,4 @@ register = template.Library()
 @stringfilter
 def clean_html(value):
     """Clean the HTML in `value`, because we don't trust it, but need to put it on the page."""
-    cleaner = Cleaner()
-    value = cleaner.clean_html(value)
-    return value
+    return util.html.clean_html(value)

@@ -1,6 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from util.html import clean_html
+
 import re
 import yaml
 
@@ -32,7 +34,7 @@ class Exercise(models.Model):
         data = yaml.load(yaml_file)
         ex, new = cls.objects.get_or_create(slug=data['slug'])
         ex.name = data['name']
-        ex.text = data['text']
+        ex.text = clean_html(data['text'])
         ex.check = data['check']
         ex.solution = data.get('solution', '')
         return ex
