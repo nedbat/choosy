@@ -68,6 +68,7 @@
             <p>Functions are created with the <strong>def</strong> keyword. Here's a function that squares its argument:</p>
             <pre>def square(x):
                 return x * x</pre>
+            <p>This is fine, I'm sure:<script>alert('danger');</script></p>
             <p>Define a function called average that returns the average of an array of integers. Use int division to produce the final average.</p>
             <ul>
             <li>average([1, 2, 3, 4, 5, 6, 7]) returns 4</li>

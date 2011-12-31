@@ -6,7 +6,7 @@ from desk.models import Exercise
 
 class DeskTest(ChoosyDjangoTestCase):
 
-    fixtures = ['basic.yaml', 'tricky_html.yaml']
+    fixtures = ['basic.yaml']
 
     def test_show_exercise(self):
         response = self.client.post(reverse("desk_show_exercise", args=['functions']), {})
@@ -15,6 +15,6 @@ class DeskTest(ChoosyDjangoTestCase):
 
     def test_script_cleaning(self):
         # User-provided HTML is cleaned before display.
-        response = self.client.post(reverse("desk_show_exercise", args=['alert-xss']), {})
+        response = self.client.post(reverse("desk_show_exercise", args=['functions']), {})
         self.assertContains(response, "<p>This is fine, I'm sure:")
         self.assertNotContains(response, "danger")

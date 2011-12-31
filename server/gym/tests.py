@@ -19,11 +19,15 @@ class GymTest(ChoosyDjangoTestCase):
         self.assertQuerysetEqual(response.context['exes'], ['<Exercise: Variables>', '<Exercise: Lists>', '<Exercise: Functions>'])
 
     def test_show_exercise(self):
-        response = self.client.get(reverse('gym_show_exercise', args=[1, "Variables"]))
+        response = self.client.get(reverse('gym_show_exercise', args=[1, "variables"]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "gym/templates/exercise.html")
         self.assertEqual(response.context['ex'].id, 1)
 
+    def test_show_dangerous_html(self):
+        response = self.client.post(reverse("gym_show_exercise", args=[3, 'functions']), {})
+        self.assertContains(response, "<p>This is fine, I'm sure:")
+        self.assertNotContains(response, "danger")
 
 class GymRunTest(ChoosyDjangoTestCase):
 
