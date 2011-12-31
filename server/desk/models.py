@@ -1,7 +1,9 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+import re
 import yaml
+
 
 class Exercise(models.Model):
     """An exercise for a student to ponder."""
@@ -56,7 +58,8 @@ yaml.add_representer(quoted,
     )
 
 yaml.add_representer(literal, 
-    lambda dumper, data: dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    # PyYaml won't use literal blocks if there's trailing space, so trim trailing space from the data.
+    lambda dumper, data: dumper.represent_scalar('tag:yaml.org,2002:str', re.sub(r"\s+\n", "\n", data), style='|')
     )
 
 yaml.add_representer(mapping, 

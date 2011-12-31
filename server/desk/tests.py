@@ -29,7 +29,7 @@ EX_YAML = textwrap.dedent("""\
         y = 13
     """)
 
-class YamlImportTest(ChoosyDjangoTestCase):
+class YamlExportTest(ChoosyDjangoTestCase):
 
     def setUp(self):
         self.ex = Exercise.objects.create(
@@ -49,7 +49,17 @@ class YamlImportTest(ChoosyDjangoTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, EX_YAML)
 
-class YamlExportTest(ChoosyDjangoTestCase):
+    def test_trailing_whitespace_doesnt_bother_me(self):
+        # PyYaml won't write text with trailing whitespace to a literal block,
+        # it wants to switch to quoted scalars instead.  We should trim the
+        # trailing whitespace to keep it from freaking out.
+        ex = Exercise.objects.get(slug=EX_SLUG)
+        ex.check = ex.check.replace("\n", " \n")
+        self.assertEqual(ex.as_yaml(), EX_YAML)
+
+
+
+class YamlImportTest(ChoosyDjangoTestCase):
 
     def test_importing_exercise(self):
         self.assertEqual(0, Exercise.objects.count())
