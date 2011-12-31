@@ -7,6 +7,9 @@ from django.forms import FileField, Form, ModelForm
 from desk.models import Exercise
 from desk.forms import ExerciseForm
 
+import json
+
+
 class ImportForm(Form):
     yamlfile = FileField(
         label='Select a YAML file',
@@ -39,6 +42,12 @@ def edit(request, slug=None):
     ctx = RequestContext(request)
     ctx['form'] = form
     return render_to_response('desk/templates/edit_exercise.html', ctx)
+
+@require_POST
+def delete(request, exid):
+    ex = Exercise.objects.get(id=exid)
+    ex.delete()
+    return HttpResponse(json.dumps({'status': 'ok'}), mimetype="application/json")
 
 def import_(request):
     if request.method == "POST":

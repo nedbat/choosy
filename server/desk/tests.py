@@ -58,7 +58,6 @@ class YamlExportTest(ChoosyDjangoTestCase):
         self.assertEqual(ex.as_yaml(), EX_YAML)
 
 
-
 class YamlImportTest(ChoosyDjangoTestCase):
 
     def test_importing_exercise(self):
@@ -86,3 +85,22 @@ class YamlImportTest(ChoosyDjangoTestCase):
         response = client.post(reverse('import_exercise'), {}, follow=True) 
         self.assertFormError(response, 'form', None, [])
         self.assertFormError(response, 'form', 'yamlfile', ['This field is required.'])
+
+
+class DeleteTest(ChoosyDjangoTestCase):
+
+    fixtures = ['basic.yaml']
+
+    def test_deleting_exercise(self):
+        self.assertQuerysetEqual(Exercise.objects.all(), ['<Exercise: Variables>', '<Exercise: Functions>', '<Exercise: Lists>'])
+        ex = Exercise.objects.get(slug="functions")
+        client = Client()
+        response = client.post(reverse("delete_exercise", args=[ex.id]), {})
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(Exercise.objects.all(), ['<Exercise: Variables>', '<Exercise: Lists>'])
+
+    def test_deleting_requires_post(self):
+        ex = Exercise.objects.get(slug="functions")
+        client = Client()
+        response = client.get(reverse("delete_exercise", args=[ex.id]))
+        self.assertEqual(response.status_code, 405)

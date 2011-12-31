@@ -58,6 +58,26 @@ var choosy = {
         });
     },
 
+    // delete_exercise
+    delete_exercise: function(exid) {
+        // Double-check.
+        if (!confirm("Are you sure you want to delete this exercise for realz?")) {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/desk/" + exid + "/delete/",
+            data: {
+                csrfmiddlewaretoken: choosy.csrf_token,
+            },
+            success: function(obj) {
+                alert("It's gone.");
+                document.location = "/desk/";
+            },
+        });
+    },
+
     // make_html_editor: turn textareas into TinyMCE html editors.
     make_html_editor: function(id) {
         tinyMCE.init({

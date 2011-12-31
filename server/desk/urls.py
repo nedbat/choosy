@@ -6,5 +6,6 @@ urlpatterns = patterns('desk.views',
     url(r'^import/$', 'import_', name='import_exercise'),
     url(r'^(?P<slug>[-\w]+)/$', 'show', name='desk_show_exercise'),
     url(r'^(?P<slug>[-\w]+)/edit/$', 'edit', name='edit_exercise'),
+    url(r'^(?P<exid>\d+)/delete/$', 'delete', name='delete_exercise'),
     url(r'^(?P<slug>[-\w]+)/yaml/$', 'yaml', name='yaml_exercise'),
 )

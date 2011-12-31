@@ -1,0 +1,61 @@
+- fields: {check: "def check(t, c):\n    with c.expect(\"You should have a variable\
+      \ named y.\"):\n        names = t.names()\n        c.test(names, \"You have\
+      \ no variables.\")\n        if 'y' not in names:\n            if len(names)\
+      \ == 1:\n                c.fail(\"You have a variable named %s.\" % names[0])\n\
+      \            else:\n                c.fail(\"You have variables named %s.\"\
+      \ % (\", \".join(names)))\n    y = t.module.y\n    with c.expect(\"y should\
+      \ be 13.\"):\n        c.test(y == 13, \"Your y is %r.\" % y)\n", name: Variables,
+    slug: variables, solution: 'y = 13
+
+      ', text: '<p>In Python, you don''t have to declare variables before you use
+      them.&nbsp; Just assign a value to a name, and you have a variable.&nbsp; Here''s
+      x with a value of 12:</p>
+
+      <pre>x = 12</pre>
+
+      <p>Create y with a value of 13:</p>
+
+      '}
+  model: desk.exercise
+  pk: 1
+- fields: {check: "def check(t, c):\n    c.function_returns(t.module, \"average\"\
+      , [\n        ([1, 2, 3, 4, 5, 6, 7],     4),\n        ([1],                \
+      \       1),\n        ([3, 5],                    4),\n        ([-2, 0, 2], \
+      \               0),\n        ])\n", name: Functions, slug: functions, solution: "def\
+      \ average(nums):\n    return sum(nums)//len(nums)\n", text: "<p>Functions are\
+      \ created with the <strong>def</strong> keyword. Here's a function that squares\
+      \ its argument:</p>\n<pre>def square(x):\n    return x * x</pre>\n<p>Define\
+      \ a function called average that returns the average of an array of integers.\
+      \ Use int division to produce the final average.</p>\n<ul>\n<li>average([1,\
+      \ 2, 3, 4, 5, 6, 7]) returns 4</li>\n<li>average([1]) returns 1</li>\n<li>average([-2,\
+      \ 0, -2]) returns 0</li>\n</ul>\n"}
+  model: desk.exercise
+  pk: 2
+- fields: {check: "def check(t, c):\n    with c.expect(\"\"\"You should have a list\
+      \ named \"my_list\".\"\"\"):\n        names = t.names()\n        c.test(names,\
+      \ 'You have no variables.')\n        if \"my_list\" not in names:\n        \
+      \    if len(names) > 1:\n                c.fail('You have these variables: %s.'\
+      \ % (\", \".join(sorted(names)),))\n            else:\n                c.fail('You\
+      \ have this variable: %s' % names[0])\n        my_list = t.module.my_list\n\
+      \        c.test(isinstance(my_list, list),\n            \"Your my_list isn't\
+      \ a list, instead it's %s\" % type(my_list).__name__\n            )\n    with\
+      \ c.expect('''\"my_list\" should have 5 elements, all numbers.'''):\n      \
+      \  c.test(len(my_list) == 5, 'Your \"my_list\" has %d elements.' % len(my_list))\n\
+      \        c.test(all(isinstance(x, int) for x in my_list),\n            \"Your\
+      \ my_list has some non-number elements.\"\n            )\n    with c.expect('''There\
+      \ should be a number smaller than 10.'''):\n        c.test(any(x < 10 for x\
+      \ in my_list))\n    with c.expect('''There should be a number greater than 10.'''):\n\
+      \        c.test(any(x > 10 for x in my_list))\n", name: Lists, slug: lists,
+    solution: 'my_list = [1, 2, 3, 4, 17]
+
+      ', text: '<p>Lists in Python can hold many values called elements. You create
+      them with square brackets and commas:</p>
+
+      <pre>my_list = [1, 2, 3, 99]</pre>
+
+      <p>Create a list called my_list here, make it have five numbers in it, some
+      smaller than 10, and some larger than 10:</p>
+
+      '}
+  model: desk.exercise
+  pk: 3

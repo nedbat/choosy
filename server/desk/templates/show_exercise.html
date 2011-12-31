@@ -2,6 +2,24 @@
 
 {% block title %}Exercise: {{ ex.name }}{% endblock %}
 
+{% block head %}
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <script>
+  $(function() {
+      choosy.set_csrf_token("{{ csrf_token }}");
+
+      $('#delete_exercise').click(
+          function(ev) {
+              choosy.delete_exercise("{{ ex.id }}");
+          }
+      );
+  });
+  </script>
+{% endblock head %}
+
 {% block main %}
 
 <h1>Exercise: {{ ex.name }}</h1>
@@ -11,6 +29,10 @@
 <pre>{{ ex.check }}</pre>
 <hr/>
 <pre>{{ ex.solution }}</pre>
-<p><a href='{% url edit_exercise ex.slug %}'>Edit</a> | <a href='{% url yaml_exercise ex.slug %}'>YAML</a></p>
+<p>
+    <a href='{% url edit_exercise ex.slug %}'>Edit</a> | 
+    <a href='{% url yaml_exercise ex.slug %}'>Export</a> |
+    <a href='#' id='delete_exercise'>Delete</a>
+</p>
 
 {% endblock main %}
