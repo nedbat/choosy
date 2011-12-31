@@ -11,61 +11,46 @@ from desk.models import Exercise
 
 class GymTest(ChoosyDjangoTestCase):
 
-    def setUp(self):
-        self.client = Client()
-
-        self.ex1 = Exercise.objects.create(
-            slug="test1",
-            name="First test",
-            text="<p>First!</p>",
-            check=textwrap.dedent("""\
-                def check(t, c):
-                    with c.expect("First"):
-                        c.test(t.names() == ['a'], "No a: %s" % t.names())
-                """),
-            solution="a = 17",
-            )
-
-        self.ex2 = Exercise.objects.create(
-            slug="test2",
-            name="Second test",
-            text="<p>Second!</p>",
-            check=textwrap.dedent("""\
-                def check(t, c):
-                    with c.expect("First"):
-                        c.test(t.names() == ['a'], "No a: %s" % t.names())
-                """),
-            solution="b = 17",
-            )
+    fixtures = ['basic.yaml']
 
     def test_index(self):
         response = self.client.get(reverse('gym'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "gym/templates/index.html")
-        self.assertQuerysetEqual(response.context['exes'], ['<Exercise: First test>', '<Exercise: Second test>'])
+        self.assertQuerysetEqual(response.context['exes'], ['<Exercise: Variables>', '<Exercise: Lists>', '<Exercise: Functions>'])
 
     def test_show_exercise(self):
-        response = self.client.get(reverse('gym_show_exercise', args=[self.ex1.id, self.ex1.slug]))
+        response = self.client.get(reverse('gym_show_exercise', args=[1, "Variables"]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "gym/templates/exercise.html")
-        self.assertEqual(response.context['ex'].id, self.ex1.id)
+        self.assertEqual(response.context['ex'].id, 1)
+
+
+class GymRunTest(ChoosyDjangoTestCase):
+
+    fixtures = ['basic.yaml']
 
     def test_run_must_post(self):
         # The /gym/run endpoint requires a POST
-        response = self.client.get(reverse('gym_run', args=[self.ex1.id]))
+        response = self.client.get(reverse('gym_run', args=[1]))
         self.assertEqual(response.status_code, 405)
 
     def test_run_successful(self):
-        response = self.client.post(reverse('gym_run', args=[self.ex1.id]), {'code': 'a = 17'})
-        self.assertJsonEqual(response, 
-            {'status': 'ok', 'checks': [{'status': 'OK', 'expect': 'First'}], 'stdout': ''}
-            )
+        response = self.client.post(reverse('gym_run', args=[1]), {'code': 'y = 13'})
+        self.assertJsonEqual(response, {'status': 'ok', 'stdout': '',
+            'checks': [
+                {'status': 'OK', 'expect': 'You should have a variable named y.'},
+                {'status': 'OK', 'expect': 'y should be 13.'},
+                ],
+            })
 
     def test_run_unsuccessful(self):
-        response = self.client.post(reverse('gym_run', args=[self.ex1.id]), {'code': 'xx = 17'})
-        self.assertJsonEqual(response, 
-            {'status': 'ok', 'checks': [{'status': 'FAIL', 'expect': 'First', 'did': "No a: ['xx']"}], 'stdout': ''}
-            )
+        response = self.client.post(reverse('gym_run', args=[1]), {'code': 'xx = 17'})
+        self.assertJsonEqual(response, {'status': 'ok', 'stdout': '',
+            'checks': [
+                {'status': 'FAIL', 'expect': 'You should have a variable named y.', 'did': "You have a variable named xx."},
+                ],
+            })
 
     def test_run_anonymous(self):
         # /gym/run can accept the student and teacher code, for testing while editing exercises.
