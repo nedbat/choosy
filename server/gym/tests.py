@@ -2,7 +2,6 @@
 
 import textwrap
 
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 
 from util.test import ChoosyDjangoTestCase

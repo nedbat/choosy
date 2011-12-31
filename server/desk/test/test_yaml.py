@@ -1,7 +1,6 @@
 import textwrap
 import StringIO
 
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 
 from util.test import ChoosyDjangoTestCase
@@ -32,6 +31,7 @@ EX_YAML = textwrap.dedent("""\
 class YamlExportTest(ChoosyDjangoTestCase):
 
     def setUp(self):
+        super(YamlExportTest, self).setUp()
         self.ex = Exercise.objects.create(
             slug=EX_SLUG,
             name=EX_NAME,
@@ -44,8 +44,7 @@ class YamlExportTest(ChoosyDjangoTestCase):
         self.assertEqual(self.ex.as_yaml(), EX_YAML)
 
     def test_exporting_exercise(self):
-        client = Client()
-        response = client.get(reverse('yaml_exercise', args=[self.ex.slug]))
+        response = self.client.get(reverse('yaml_exercise', args=[self.ex.slug]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, EX_YAML)
 
@@ -62,16 +61,15 @@ class YamlImportTest(ChoosyDjangoTestCase):
 
     def test_importing_exercise(self):
         self.assertEqual(0, Exercise.objects.count())
-        client = Client()
 
         # Visit the import page
-        response = client.get(reverse('import_exercise'))
+        response = self.client.get(reverse('import_exercise'))
         self.assertEqual(response.status_code, 200)
 
         # Post to the import page
         yaml_file = StringIO.StringIO(EX_YAML)
         yaml_file.name = "test_yaml.yaml"
-        response = client.post(reverse('import_exercise'), {'yamlfile': yaml_file}, follow=True) 
+        response = self.client.post(reverse('import_exercise'), {'yamlfile': yaml_file}, follow=True) 
         self.assertRedirects(response, reverse('desk_show_exercise', args=[EX_SLUG]))
 
         ex = Exercise.objects.get(slug=EX_SLUG)
@@ -81,7 +79,6 @@ class YamlImportTest(ChoosyDjangoTestCase):
         self.assertEqual(ex.solution, EX_SOLUTION)
 
     def test_importing_badly(self):
-        client = Client()
-        response = client.post(reverse('import_exercise'), {}, follow=True) 
+        response = self.client.post(reverse('import_exercise'), {}, follow=True) 
         self.assertFormError(response, 'form', None, [])
         self.assertFormError(response, 'form', 'yamlfile', ['This field is required.'])

@@ -11,12 +11,6 @@ from checker.run import run_python
 
 class CheckerTestCase(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def clean_results(self, results):
         """Remove often-changed data from the tracebacks in results."""
         for d in results:
