@@ -24,7 +24,7 @@ class DeskTest(ChoosyDjangoTestCase):
         # User-provided HTML is cleaned before display.
         response = self.client.get(reverse("desk_show_exercise", args=['functions']))
         self.assertContains(response, "<p>This is fine, I'm sure:")
-        self.assertNotContains(response, "danger")
+        self.assertNotContains(response, "<script>alert")
 
 
 class DeskEditTest(ChoosyDjangoTestCase):
@@ -34,8 +34,9 @@ class DeskEditTest(ChoosyDjangoTestCase):
     def test_edit(self):
         # Get the edit page
         response = self.client.get(reverse("edit_exercise", args=['functions']))
-        self.assertContains(response, "&lt;p&gt;This is fine, I&#39;m sure:")
-        self.assertNotContains(response, "danger")
+        self.assertContains(response, "\nThis is fine, I&#39;m sure:")
+        # While editing, your markdown will still have malicious stuff in it.
+        self.assertContains(response, "<script>")
         self.assertContains(response, '<form action="." method="post">')
 
         # Post new content.
@@ -51,7 +52,8 @@ class DeskEditTest(ChoosyDjangoTestCase):
         # The exercise has changed!
         ex = Exercise.objects.get(slug='functions')
         self.assertEqual(ex.name, "Functions New")
-        self.assertEqual(ex.text, "<p>What could go wrong? It should be fine.</p>\n")
+        # While editing, your markdown will still have malicious stuff in it.
+        self.assertEqual(ex.text, '<p>What could go wrong?<script>alert("danger")</script> It should be fine.</p>\n')
 
     def test_new(self):
         # Get the edit page
@@ -73,5 +75,6 @@ class DeskEditTest(ChoosyDjangoTestCase):
             ['<Exercise: Variables>', '<Exercise: Lists>', '<Exercise: Functions>', '<Exercise: A New Exercise!>']
             )
         ex = Exercise.objects.get(slug='brand-new')
-        self.assertEqual(ex.text, "<p>What could go wrong? It should be fine.</p>\n")
+        # While editing, your markdown will still have malicious stuff in it.
+        self.assertEqual(ex.text, '<p>What could go wrong?<script>alert("danger")</script> It should be fine.</p>\n')
         self.assertEqual(ex.check, "def check(t, c):\n    pass\n")

@@ -1,8 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from util.html import clean_html
-
 import re
 import yaml
 
@@ -13,7 +11,7 @@ class Exercise(models.Model):
     slug = models.CharField(max_length=80, db_index=True)
     # The human-readable name for the exercise.
     name = models.CharField(max_length=80)
-    # The HTML text of the problem, for the student to read.
+    # The Markdown text of the problem, for the student to read.
     text = models.TextField()
     # The Python code to check the student's answer.
     check = models.TextField()
@@ -34,7 +32,7 @@ class Exercise(models.Model):
         data = yaml.load(yaml_file)
         ex, new = cls.objects.get_or_create(slug=data['slug'])
         ex.name = data['name']
-        ex.text = clean_html(data['text'])
+        ex.text = data['text']
         ex.check = data['check']
         ex.solution = data.get('solution', '')
         return ex

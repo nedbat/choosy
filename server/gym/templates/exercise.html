@@ -32,7 +32,7 @@
 {% endblock head %}
 
 {% block main %}
-  {{ ex.text|clean_html|safe }}
+  {{ ex.text|markdown }}
 
   <div class='exercise'>
     <textarea class='code' id='editor'></textarea>

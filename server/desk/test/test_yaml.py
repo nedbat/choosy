@@ -66,18 +66,15 @@ class YamlImportTest(ChoosyDjangoTestCase):
         response = self.client.get(reverse('import_exercise'))
         self.assertEqual(response.status_code, 200)
 
-        # Post to the import page.  Importing cleans the HTML, so let's try
-        # sneaking something nasty in there.
-        the_yaml = EX_YAML.replace("Good luck", "Good <script>alert('danger')</script>luck")
-        self.assertIn("danger", the_yaml)
-        yaml_file = StringIO.StringIO(the_yaml)
+        # Post to the import page.
+        yaml_file = StringIO.StringIO(EX_YAML)
         yaml_file.name = "test_yaml.yaml"
         response = self.client.post(reverse('import_exercise'), {'yamlfile': yaml_file}, follow=True) 
         self.assertRedirects(response, reverse('desk_show_exercise', args=[EX_SLUG]))
 
         ex = Exercise.objects.get(slug=EX_SLUG)
         self.assertEqual(ex.name, EX_NAME)
-        self.assertEqual(ex.text.rstrip(), EX_TEXT.rstrip())
+        self.assertEqual(ex.text, EX_TEXT)
         self.assertEqual(ex.check, EX_CHECK)
         self.assertEqual(ex.solution, EX_SOLUTION)
 

@@ -5,9 +5,11 @@
         slug: "variables"
         name: "Variables"
         text: |
-            <p>In Python, you don't have to declare variables before you use them.&nbsp; Just assign a value to a name, and you have a variable.&nbsp; Here's x with a value of 12:</p>
-            <pre>x = 12</pre>
-            <p>Create y with a value of 13:</p>
+            In Python, you don't have to declare variables before you use them. Just assign a value to a name, and you have a variable. Here's x with a value of 12:
+                
+                x = 12
+                
+            Create y with a value of 13:
         check: |
             def check(t, c):
                 with c.expect("You should have a variable named y."):
@@ -30,9 +32,11 @@
         slug: "lists"
         name: "Lists"
         text: |
-            <p>Lists in Python can hold many values called elements. You create them with square brackets and commas:</p>
-            <pre>my_list = [1, 2, 3, 99]</pre>
-            <p>Create a list called my_list here, make it have five numbers in it, some smaller than 10, and some larger than 10:</p>
+            Lists in Python can hold many values called elements. You create them with square brackets and commas:
+            
+                my_list = [1, 2, 3, 99]
+                
+            Create a list called my_list here, make it have five numbers in it, some smaller than 10, and some larger than 10:
         check: |
             def check(t, c):
                 with c.expect("""You should have a list named "my_list"."""):
@@ -65,16 +69,19 @@
         slug: "functions"
         name: "Functions"
         text: |
-            <p>Functions are created with the <strong>def</strong> keyword. Here's a function that squares its argument:</p>
-            <pre>def square(x):
-                return x * x</pre>
-            <p>This is fine, I'm sure:<script>alert('danger');</script></p>
-            <p>Define a function called average that returns the average of an array of integers. Use int division to produce the final average.</p>
-            <ul>
-            <li>average([1, 2, 3, 4, 5, 6, 7]) returns 4</li>
-            <li>average([1]) returns 1</li>
-            <li>average([-2, 0, -2]) returns 0</li>
-            </ul>
+            Functions are created with the `def` keyword. Here's a function that squares its argument:
+            
+                def square(x):
+                    return x * x
+                    
+            This is fine, I'm sure:<script>alert('danger');</script>
+            
+            Define a function called average that returns the average of an array of integers. 
+            Use int division to produce the final average.
+            
+            * average([1, 2, 3, 4, 5, 6, 7]) returns 4
+            * average([1]) returns 1
+            * average([-2, 0, -2]) returns 0
         check: |
             def check(t, c):
                 c.function_returns(t.module, "average", [

@@ -61,6 +61,9 @@ pre {
     border-radius: .3em;
     background: #eee;
 }
+code {
+    font-family: "Lucida Console", monospace;
+}
 h1 {
     font-size: 140%;
 }
@@ -83,6 +86,10 @@ ul {
     font-style: italic;
     margin-left: 2em;
 }
+textarea {
+    width: 100%;
+    height: 350px;
+}
 #editor {
     font-size: 120%;
     width: 800px;
@@ -101,9 +108,8 @@ ul {
     overflow-x: auto;
     width: 100%;
 }
-body.mceContentBody {
-    background: white;
-    margin: 10px;
+.CodeMirror-lines {
+    font-family: "Lucida Console", monospace;
 }
 fieldset {
     border: none;

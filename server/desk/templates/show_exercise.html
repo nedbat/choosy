@@ -26,12 +26,12 @@
 {% block main %}
 
 <h1>Exercise: {{ ex.name }}</h1>
-<div>{{ ex.text|clean_html|safe }}</div>
+<div>{{ ex.text|markdown }}</div>
 <p>&nbsp;</p>
 <hr/>
-<pre class="python">{{ ex.check }}</pre>
+{{ ex.check|syntax_color }}
 <hr/>
-<pre class="python">{{ ex.solution }}</pre>
+{{ ex.solution|syntax_color }}
 <p>
     <a href='{% url edit_exercise ex.slug %}'>Edit</a> | 
     <a href='{% url yaml_exercise ex.slug %}'>Export</a> |

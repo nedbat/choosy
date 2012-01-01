@@ -1,8 +1,6 @@
 from django.forms import ModelForm, CharField, Textarea
 from desk.models import Exercise
 
-from util.html import clean_html
-
 
 class MultilineTextField(CharField):
     """A multi-line text field that scrubs \r from the results."""
@@ -17,30 +15,30 @@ class MultilineTextField(CharField):
         return value
 
 
-class ParanoidHtmlField(MultilineTextField):
-    """A multi-line HTML editing field that doesn't trust the input."""
+class MarkdownField(MultilineTextField):
+    """A multi-line Markdown editing field."""
     def __init__(self):
-        super(ParanoidHtmlField, self).__init__(widget=ParanoidHtmlTextarea)
-
-    def to_python(self, value):
-        value = clean_html(value)
-        value = super(ParanoidHtmlField, self).to_python(value)
-        return value
+        super(MarkdownField, self).__init__(widget=MarkdownTextarea)
 
 
-class ParanoidHtmlTextarea(Textarea):
-    """A textarea for editing HTML when we don't trust the editor."""
-    def render(self, name, value, attrs=None):
-        if value:
-            value = clean_html(value)
-        return super(ParanoidHtmlTextarea, self).render(name, value, attrs)
-    
+class MarkdownTextarea(Textarea):
+    """A textarea for editing Markdown."""
+    def __init__(self, attrs=None):
+        cls = ""
+        if attrs:
+            cls = attrs.get("class", "")
+        my_attrs = {}
+        if attrs:
+            my_attrs.update(attrs)
+        my_attrs["class"] = (cls + " markdown").strip()
+        super(MarkdownTextarea, self).__init__(my_attrs)
+
 
 class ExerciseForm(ModelForm):
     """For editing Exercises."""
     class Meta:
         model = Exercise
 
-    text = ParanoidHtmlField()
+    text = MarkdownField()
     check = MultilineTextField()
     solution = MultilineTextField()

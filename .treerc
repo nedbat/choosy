@@ -4,5 +4,4 @@ ignore =
  *.db
  htmlcov
  srvstat
- tiny_mce
  *compressed.js

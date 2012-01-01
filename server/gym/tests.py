@@ -27,7 +27,7 @@ class GymTest(ChoosyDjangoTestCase):
     def test_show_dangerous_html(self):
         response = self.client.get(reverse("gym_show_exercise", args=[3, 'functions']), {})
         self.assertContains(response, "<p>This is fine, I'm sure:")
-        self.assertNotContains(response, "danger")
+        self.assertNotContains(response, "<script>alert")
 
 
 class GymRunTest(ChoosyDjangoTestCase):
