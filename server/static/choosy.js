@@ -98,6 +98,7 @@ var choosy = {
         });
     },
 
+    // The python mode we use with CodeMirror.
     python_mode: {
         name: "python",
         version: 2,
@@ -123,9 +124,15 @@ var choosy = {
             CodeMirror.runMode(pre.text(), choosy.python_mode, pre[0]);
             pre.addClass("cm-s-eclipse");
         });
+    },
+
+    // page_init: invoked when the page is ready: all page init stuff goes
+    // here.
+    page_init: function() {
+        choosy.highlight_all_python();
     }
 };
 
 $(function() {
-    choosy.highlight_all_python();
+    choosy.page_init();
 });
