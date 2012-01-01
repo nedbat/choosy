@@ -1,9 +1,11 @@
 slug: "variables"
 name: "Variables"
 text: |
-    <p>In Python, you don't have to declare variables before you use them.&nbsp; Just assign a value to a name, and you have a variable.&nbsp; Here's x with a value of 12:</p>
-    <pre>x = 12</pre>
-    <p>Create y with a value of 13:</p>
+    In Python, you don't have to declare variables before you use them.&nbsp; Just assign a value to a name, and you have a variable.&nbsp; Here's x with a value of 12:
+    
+        x = 12
+        
+    Create y with a value of 13:
 check: |
     def check(t, c):
         with c.expect("You should have a variable named y."):
