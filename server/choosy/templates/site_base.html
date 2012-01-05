@@ -1,0 +1,12 @@
+{# allauth expects a site_base.html template #}
+{% extends "base.html" %}
+
+{# allauth's head_title goes in our title. #}
+{% block title %}
+    {% block head_title %}{% endblock head_title %}
+{% endblock %}
+
+{# allauth's body goes in our main. #}
+{% block main %}
+    {% block body %}{% endblock %}
+{% endblock %}

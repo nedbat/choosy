@@ -10,7 +10,9 @@ from checker.run import run_python
 
 def index(request):
     exes = Exercise.objects.all()
-    return render_to_response('gym/templates/index.html', {'exes': exes})
+    ctx = RequestContext(request)
+    ctx['exes'] = exes
+    return render_to_response('gym/templates/index.html', ctx)
 
 def exercise(request, exid, slug):
     ex = get_object_or_404(Exercise, pk=exid)

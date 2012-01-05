@@ -18,17 +18,20 @@ header {
     border-bottom: 2px solid #ccc;
     font-family: Verdana, sans-serif;
 }
-header p {
+header div {
     font-size: 100%;
     margin: 0;
     padding: 0;
 }
-header p a {
+header div a {
     text-decoration: none;
     color: inherit;
 }
-header p a:hover {
+header div a:hover {
     text-decoration: underline;
+}
+header div#upper_right {
+    float: right;
 }
 footer {
     width: 100%;
@@ -119,10 +122,14 @@ fieldset {
 div.field {
     margin: 1em 0;
 }
+div.ctrlHolder {
+    margin: 1em 0;
+}
 div.widget {
     margin: 0 0 0 8em;
 }
 label {
+    clear: both;
     float: left;
     width: 7em;
     text-align: right;

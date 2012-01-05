@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^gym/', include('gym.urls')),
     url(r'^desk/', include('desk.urls')),
     url(r'^debug/', include('debug.urls')),
+    url(r'^accounts/', include('allauth.urls')),
 )

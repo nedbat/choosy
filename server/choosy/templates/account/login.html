@@ -1,0 +1,56 @@
+{# An override of the allauth account/login.html template. #}
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account_tags %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block main %}
+
+{% if not user.is_authenticated %}
+<p>If you have an account with one of these sites, click the link to sign in with it:</p>
+
+  <div class="socialaccount_ballot">
+
+    <ul class="socialaccount_providers">
+      {% include "socialaccount/snippets/provider_list.html" %}
+    </ul>
+
+  </div>
+
+  {% include "socialaccount/snippets/login_extra.html" %}
+ 
+<p>OR,</p>
+  
+  {# if we ever do Facebook, we need this: #}
+  {# {% include "socialaccount/snippets/login_extra.html" %} #}
+  {# end #}
+
+{% endif %}
+
+<p>Sign in with your Choose Python account:</p>
+
+    <form class="login uniForm" method="POST" action="{% url account_login %}">
+        {% csrf_token %}
+        <fieldset class="inlineLabels">
+            {{ form.as_p }}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <div class="buttonHolder">
+                {# Someday enable this? #}
+                {# <a class="button secondaryAction" href="{% url account_reset_password %}">{% trans "Forgot Password?" %}</a> #}
+                {# end #}
+                <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+            </div>
+        </fieldset>
+    </form>
+    
+<p>If you don't have an account, <a href="{{ signup_url }}">sign up</a> for one.</p>
+
+{% if user.is_authenticated %}
+{% include "account/snippets/already_logged_in.html" %}
+{% endif %}
+    
+{% endblock %}

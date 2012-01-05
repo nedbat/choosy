@@ -8,11 +8,20 @@
   <body>
     <div id="container">
       <header>
-        <p>Choose Python / 
-          <a href="{% url gym %}">Exercises</a> / 
-          <a href="{% url desk %}">Write your own</a> / 
-          About
-        </p>
+        <div id="upper_right">
+          {% if user.is_authenticated %}
+            {{ user }}
+          {% else %}
+            <a href="{% url account_login %}">Log in</a>
+          {% endif %}
+        </div>
+        <div>Choose Python / 
+          <a href="{% url gym %}">Exercises</a>
+          {% if user.is_authenticated %}
+          / 
+          <a href="{% url desk %}">Write your own</a>
+          {% endif %}
+        </div>
       </header>
       <div id="main">
         {% block main %}{% endblock %}
