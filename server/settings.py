@@ -162,6 +162,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
+LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/gym/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

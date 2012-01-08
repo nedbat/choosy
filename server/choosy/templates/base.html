@@ -10,7 +10,7 @@
       <header>
         <div id="upper_right">
           {% if user.is_authenticated %}
-            {{ user }}
+            <a href="{% url account_you %}">{{ user }}</a>
           {% else %}
             <a href="{% url account_login %}">Log in</a>
           {% endif %}
