@@ -65,8 +65,8 @@ if USE_PYPY:
             sys.path[:0] = ['/choosy']
             import exerciser
 
-            output, results = exerciser.run_exercise('.')
-            print json.dumps([output, results])
+            results = exerciser.run_exercise('.')
+            print json.dumps(results)
             """)
         args = [
             '--heapsize', '8000000',    # 15m is about the minimum, but this is what I really want.
