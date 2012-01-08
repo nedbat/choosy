@@ -1,0 +1,10 @@
+{% extends "choosy/templates/base.html" %}
+{% load choosy %}
+
+{% block title %}You{% endblock %}
+
+{% block main %}
+  <h1>You</h1>
+
+  <p><a href='{% url account_logout %}'>Logout</a></p>
+{% endblock main %}
