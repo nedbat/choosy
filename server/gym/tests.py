@@ -16,7 +16,12 @@ class GymTest(ChoosyDjangoTestCase):
         response = self.client.get(reverse('gym'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "gym/templates/index.html")
-        self.assertQuerysetEqual(response.context['exes'], ['<Exercise: Variables>', '<Exercise: Lists>', '<Exercise: Functions>'])
+        self.assertQuerysetEqual(response.context['exes'], [
+            '<Exercise: Variables>', 
+            '<Exercise: Lists>', 
+            '<Exercise: Functions>',
+            '<Exercise: Other Exercise>',
+            ])
 
     def test_show_exercise(self):
         response = self.client.get(reverse('gym_show_exercise', args=[1, "variables"]))
