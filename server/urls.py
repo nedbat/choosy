@@ -5,6 +5,7 @@ from django.views.generic.simple import direct_to_template
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', direct_to_template, { 'template': 'choosy/templates/home.html' }, name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^gym/', include('gym.urls')),
     url(r'^desk/', include('desk.urls')),

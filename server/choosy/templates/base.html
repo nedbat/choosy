@@ -15,7 +15,7 @@
             <a href="{% url account_login %}">Log in</a>
           {% endif %}
         </div>
-        <div>Choose Python / 
+        <div><a href="{% url home %}">Choose Python</a> / 
           <a href="{% url gym %}">Exercises</a>
           {% if user.is_authenticated %}
           / 
