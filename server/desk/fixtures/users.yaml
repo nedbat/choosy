@@ -1,0 +1,26 @@
+-
+    pk: 10
+    model: auth.user
+    fields:
+        date_joined: 2012-01-07 14:27:12.381000
+        email: ned@ned.com
+        is_active: true
+        is_staff: false
+        is_superuser: false
+        last_login: 2012-01-07 14:27:12.381000
+        password: sha1$d6b0e$ff557dec4bd8b2dba0b0386f0c99a7c6b8cab4f6
+        user_permissions: []
+        username: basicauthor
+-
+    pk: 11
+    model: auth.user
+    fields:
+        date_joined: 2012-01-07 14:27:12.381000
+        email: other@ned.com
+        is_active: true
+        is_staff: false
+        is_superuser: false
+        last_login: 2012-01-07 14:27:12.381000
+        password: sha1$d6b0e$ff557dec4bd8b2dba0b0386f0c99a7c6b8cab4f6
+        user_permissions: []
+        username: otherauthor

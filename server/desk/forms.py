@@ -1,4 +1,4 @@
-from django.forms import ModelForm, CharField, Textarea
+from django.forms import Form, ModelForm, CharField, FileField, Textarea
 from desk.models import Exercise
 
 
@@ -38,7 +38,23 @@ class ExerciseForm(ModelForm):
     """For editing Exercises."""
     class Meta:
         model = Exercise
+        exclude = ['user']
 
     text = MarkdownField()
     check = MultilineTextField()
     solution = MultilineTextField()
+
+    def save(self, user=None, commit=True):
+        ex = super(ExerciseForm, self).save(commit=False)
+        if user:
+            ex.user = user
+        if commit:
+            ex.save()
+        return ex
+
+
+class ImportExerciseForm(Form):
+    yamlfile = FileField(
+        label='Select a YAML file',
+        help_text='Some Help'
+    )

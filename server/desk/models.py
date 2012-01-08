@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
 
 import re
 import yaml
@@ -7,6 +8,7 @@ import yaml
 
 class Exercise(models.Model):
     """An exercise for a student to ponder."""
+    user = models.ForeignKey(User)
     # The short url-able name for the exercise.
     slug = models.CharField(max_length=80, db_index=True)
     # The human-readable name for the exercise.
@@ -27,10 +29,10 @@ class Exercise(models.Model):
         return ('gym_show_exercise', [str(self.id), slugify(self.name)])
 
     @classmethod
-    def from_yaml(cls, yaml_file):
+    def from_yaml(cls, yaml_file, user):
         """Create an Exercise from a YAML file."""
         data = yaml.load(yaml_file)
-        ex, new = cls.objects.get_or_create(slug=data['slug'])
+        ex, new = cls.objects.get_or_create(slug=data['slug'], user=user)
         ex.name = data['name']
         ex.text = data['text']
         ex.check = data['check']
