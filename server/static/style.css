@@ -23,11 +23,11 @@ header div {
     margin: 0;
     padding: 0;
 }
-header div a {
+header a {
     text-decoration: none;
     color: inherit;
 }
-header div a:hover {
+header a:hover {
     text-decoration: underline;
 }
 header div#upper_right {
@@ -46,6 +46,13 @@ footer p {
     text-align: right;
     margin: 0;
     padding: 0;
+}
+footer a {
+    text-decoration: none;
+    color: inherit;
+}
+footer a:hover {
+    text-decoration: underline;
 }
 #main {
     width: 100%;
