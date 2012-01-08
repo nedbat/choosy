@@ -33,8 +33,8 @@
 <hr/>
 {{ ex.solution|syntax_color }}
 <p>
-    <a href='{% url edit_exercise ex.slug %}'>Edit</a> | 
-    <a href='{% url yaml_exercise ex.slug %}'>Export</a> |
+    <a href='{% url edit_exercise ex.id %}'>Edit</a> | 
+    <a href='{% url yaml_exercise ex.id %}'>Export</a> |
     <a href='#' id='delete_exercise'>Delete</a>
 </p>
 

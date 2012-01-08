@@ -18,8 +18,8 @@ def index(request):
     return render_to_response('desk/templates/index.html', ctx)
 
 @login_required
-def show(request, slug):
-    ex = get_object_or_404(Exercise, slug=slug)
+def show(request, exid):
+    ex = get_object_or_404(Exercise, id=exid)
     if ex.user != request.user:
         return HttpResponseForbidden(json.dumps({'status': 'error'}), mimetype="application/json")
     ctx = RequestContext(request)
@@ -27,9 +27,9 @@ def show(request, slug):
     return render_to_response('desk/templates/show_exercise.html', ctx)
 
 @login_required
-def edit(request, slug=None):
-    if slug:
-        ex = get_object_or_404(Exercise, slug=slug)
+def edit(request, exid=None):
+    if exid:
+        ex = get_object_or_404(Exercise, id=exid)
         if ex.user != request.user:
             return HttpResponseForbidden(json.dumps({'status': 'error'}), mimetype="application/json")
     else:
@@ -37,7 +37,7 @@ def edit(request, slug=None):
     form = ExerciseForm(request.POST or None, instance=ex)
     if form.is_valid():
         ex = form.save(user=request.user)
-        return redirect('desk_show_exercise', ex.slug)
+        return redirect('desk_show_exercise', ex.id)
 
     ctx = RequestContext(request)
     ctx['form'] = form
@@ -59,7 +59,7 @@ def import_(request):
         if form.is_valid():
             new_ex = Exercise.from_yaml(request.FILES['yamlfile'], user=request.user)
             new_ex.save()
-            return redirect('desk_show_exercise', new_ex.slug)
+            return redirect('desk_show_exercise', new_ex.id)
     else:
         form = ImportExerciseForm()
 
@@ -68,9 +68,9 @@ def import_(request):
     return render_to_response('desk/templates/import_exercise.html', ctx)
 
 @login_required
-def yaml(request, slug):
+def yaml(request, exid):
     """Deliver the exercise as a YAML file."""
-    ex = get_object_or_404(Exercise, slug=slug)
+    ex = get_object_or_404(Exercise, id=exid)
     if ex.user != request.user:
         return HttpResponseForbidden(json.dumps({'status': 'error'}), mimetype="application/json")
     response = HttpResponse(ex.as_yaml(), mimetype="text/yaml") 

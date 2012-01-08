@@ -97,7 +97,7 @@
             def average(nums):
                 return sum(nums)//len(nums)
 -
-    pk: 4
+    pk: 10
     model: desk.exercise
     fields:
         user: 11

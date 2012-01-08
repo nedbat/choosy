@@ -51,18 +51,18 @@ class YamlExportTest(ChoosyDjangoTestCase):
 
     def test_exporting_exercise(self):
         self.login()
-        response = self.client.get(reverse('yaml_exercise', args=[self.ex.slug]))
+        response = self.client.get(reverse('yaml_exercise', args=[self.ex.id]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, EX_YAML)
 
     def test_cant_export_exercise_anonymously(self):
-        url = reverse('yaml_exercise', args=[self.ex.slug])
+        url = reverse('yaml_exercise', args=[self.ex.id])
         response = self.client.get(url)
         self.assertRedirects(response, "%s?next=%s" % (settings.LOGIN_URL, url))
 
     def test_cant_export_others_exercise(self):
         self.login()
-        url = reverse('yaml_exercise', args=['otherexercise'])
+        url = reverse('yaml_exercise', args=[10])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
@@ -91,13 +91,14 @@ class YamlImportTest(ChoosyDjangoTestCase):
         yaml_file = StringIO.StringIO(EX_YAML)
         yaml_file.name = "test_yaml.yaml"
         response = self.client.post(reverse('import_exercise'), {'yamlfile': yaml_file}, follow=True) 
-        self.assertRedirects(response, reverse('desk_show_exercise', args=[EX_SLUG]))
 
         ex = Exercise.objects.get(slug=EX_SLUG)
         self.assertEqual(ex.name, EX_NAME)
         self.assertEqual(ex.text, EX_TEXT)
         self.assertEqual(ex.check, EX_CHECK)
         self.assertEqual(ex.solution, EX_SOLUTION)
+
+        self.assertRedirects(response, reverse('desk_show_exercise', args=[ex.id]))
 
     def test_importing_badly(self):
         self.login()

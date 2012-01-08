@@ -26,25 +26,25 @@ class DeskTest(ChoosyDjangoTestCase):
 
     def test_show_exercise(self):
         self.login()
-        response = self.client.get(reverse("desk_show_exercise", args=['functions']))
+        response = self.client.get(reverse("desk_show_exercise", args=[3]))
         self.assertTemplateUsed(response, "desk/templates/show_exercise.html")
         self.assertContains(response, "<li>average([1]) returns 1</li>")
 
     def test_cant_show_exercise_anonymously(self):
-        url = reverse("desk_show_exercise", args=['functions'])
+        url = reverse("desk_show_exercise", args=[3])
         response = self.client.get(url)
         self.assertRedirects(response, "%s?next=%s" % (settings.LOGIN_URL, url))
 
     def test_cant_show_others_exercises(self):
         self.login()
-        url = reverse("desk_show_exercise", args=['otherexercise'])
+        url = reverse("desk_show_exercise", args=[10])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
     def test_script_cleaning(self):
         self.login()
         # User-provided HTML is cleaned before display.
-        response = self.client.get(reverse("desk_show_exercise", args=['functions']))
+        response = self.client.get(reverse("desk_show_exercise", args=[3]))
         self.assertContains(response, "<p>This is fine, I'm sure:")
         self.assertNotContains(response, "<script>alert")
 
@@ -60,14 +60,14 @@ class DeskEditTest(ChoosyDjangoTestCase):
     def test_edit(self):
         self.login()
         # Get the edit page
-        response = self.client.get(reverse("edit_exercise", args=['functions']))
+        response = self.client.get(reverse("edit_exercise", args=[3]))
         self.assertContains(response, "\nThis is fine, I&#39;m sure:")
         # While editing, your markdown will still have malicious stuff in it.
         self.assertContains(response, "<script>")
         self.assertContains(response, '<form action="." method="post">')
 
         # Post new content.
-        response = self.client.post(reverse("edit_exercise", args=['functions']), {
+        response = self.client.post(reverse("edit_exercise", args=[3]), {
             'slug': 'functions',
             'name': 'Functions New',
             'text': '<p>What could go wrong?<script>alert("danger")</script> It should be fine.</p>',
@@ -77,19 +77,19 @@ class DeskEditTest(ChoosyDjangoTestCase):
         self.assertEqual(response.status_code, 200)
     
         # The exercise has changed!
-        ex = Exercise.objects.get(slug='functions')
+        ex = Exercise.objects.get(id=3)
         self.assertEqual(ex.name, "Functions New")
         # While editing, your markdown will still have malicious stuff in it.
         self.assertEqual(ex.text, '<p>What could go wrong?<script>alert("danger")</script> It should be fine.</p>\n')
 
     def test_cant_edit_exercise_anonymously(self):
-        url = reverse("edit_exercise", args=['functions'])
+        url = reverse("edit_exercise", args=[3])
         response = self.client.get(url)
         self.assertRedirects(response, "%s?next=%s" % (settings.LOGIN_URL, url))
 
     def test_cant_edit_others_exercises(self):
         self.login()
-        url = reverse("edit_exercise", args=['otherexercise'])
+        url = reverse("edit_exercise", args=[10])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
