@@ -17,4 +17,4 @@ clean:
 	-rm -f setuptools-*.egg distribute-*.egg distribute-*.tar.gz
 
 test:
-	python -m unittest discover
+	@echo "use 'manage.py test' in the server directory."
