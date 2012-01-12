@@ -9,38 +9,169 @@ to check the results of the students' work.
 Students complete exercises, then choosy runs their code, then runs the
 instructor's check code to determine the outcome of the student's work.
 
-Trying it
----------
+Development server
+------------------
 
-At a command prompt:
+Choosy is a standard Django project.  To run the development server, use pip
+to install the requirements, create a database, and then run the Django 
+server:
 
-    $ python chserver.py exercises/first.html
+    $ cd server
+    $ pip install -r devrequirements.txt
+    $ python manage.py syncdb
+    $ python manage.py runserver
 
-A browser window will appear.  Enjoy.
+NOTE: the development server doesn't use a sandbox for executing student and
+teacher code! If you try malicious things, they will execute directly on your
+local system.  Don't test the security of the sandbox, or run exercises from
+unknown sources on your development server!
 
 
 Writing exercises
 -----------------
 
-An exercise might be:
+There are two people involved in an exercise: the teacher, who writes the 
+exercise, and the student working the exercise.
 
-    Create a variable named "a" with a value of 17.
+Exercises consist of:
 
-The check could be::
+    * Slug, the short URL-safe name of the exercise.
 
-    # check_first.py
+    * Name, the human-readable name of the exercise.
 
-    def check(exercise, output, c):
-        with c.expect("""You should have a variable named "a"."""):
-            names = [n for n in dir(exercise) if not n.startswith('_')]
-            c.test(names, 'You have no variables.')
-            if not hasattr(exercise, "a"):
-                if len(names) > 1:
-                    c.fail('You have these variables: %s.' % (", ".join(sorted(names)),))
-                else:
-                    c.fail('You have this variable: %s' % names[0])
+    * Text, the written description of the problem the student must solve.
+      This is written in Markdown.
+    
+    * Check: the teacher's Python code for checking the student's work.
+      More on this below.
 
-        with c.expect('''"a" should equal 17.'''):
-            c.test(exercise.a == 17, 'Your "a" equals %r' % exercise.a)
+    * Solution: a solution to the exercise.
 
 
+Check code
+----------
+
+The teacher's check code is a Python module with a single function defined:
+
+    check(t, c)
+
+    t is a Trial object, containing the results of running the student's code.
+
+    c is Checker object, with methods for recording expectations and outcomes.
+
+    check() returns nothing, it uses the c object to indicate results.
+
+
+Trial objects
+-------------
+
+A Trial object has these attributes:
+
+    module: the module object created by running the student's code. If you
+    want to examine the my_list variable created by the student, it is 
+    t.module.my_list.
+
+    stdout: a string, the data written to stdout by the student's code.
+
+Trial objects have these methods:
+
+    names(): returns the list of names defined by the user in their code.
+
+
+Checker objects
+---------------
+
+The teacher uses Checker objects in their check code to indicate expectations
+and outcomes.  The check function is written as a series of expect clauses:
+
+    def check(t, c):
+        with c.expect("a should equal b."):
+            if t.module.a != t.module.b:
+                c.fail("Your a and b aren't equal: %r != %r." % (t.module.a, t.module.b))
+        
+        with c.expect("foo() should return 17."):
+            his_foo = t.module.foo()
+            if his_foo != 17:
+                c.fail("Your foo() returned %r." % his_foo)
+
+Each c.expect(msg) clause produces an item in the student's results.  If c.fail(msg)
+isn't called, then it will be a success result:
+
+    (green) a should equal b.
+
+If c.fail(msg) is called, then it will be a failed result, mentioning both the
+expectation and the failed results, for example:
+
+    (red) a should equal b. Your a and b aren't equal: 12 != 'hello'.
+
+As a shorthand, c.test(cond, msg) will call c.fail(msg) if cond is false.
+With it, we can shorten our example to:
+
+    def check(t, c):
+        with c.expect("a should equal b."):
+            a, b = t.module.a, t.module.b
+            c.test(a == b, "Your a and b aren't equal: %r != %r." % (a, b))
+
+        with c.expect("foo() should return 17."):
+            his_foo = t.module.foo()
+            c.test(his_foo == 17, "Your foo() returned %r." % his_foo)
+
+Both c.fail and c.test can be called with no message at all, in which case
+the failure result will simply have the expectation mentioned:
+
+    (red) a should equal b.
+
+
+Once c.fail is called, no further code in the check function is run. This
+is usually what you want, since if an early expectation is unmet, it probably
+doesn't make much sense to check later ones.  You can change this behavior
+if you'd like to continue on from a failed expectation:
+
+    def check(t, c):
+        with c.expect("1 should be 2.", continue_on_fail=True):
+            c.test(1 == 2, "That's odd, it doesn't.")
+        
+        with c.expect("a should equal b."):
+            # etc..
+
+For very thorough checks, you may have expectations that almost all students
+will pass, and you don't want to clutter up the results with them.  For
+example, once students are writing functions, the teacher expects them 
+to have a defined a function with the correct name, but if the results
+page said, "You should have a function named average," it could sounds
+patronizing.  If your expectation has quiet=True, then it will not
+appear as a success result, but will appear if it fails:
+
+    def check(t, c):
+        with c.expect("You should have a function named average.", quiet=True):
+            c.test("average" in t.names(), "You have nothing named average.")
+            c.test(callable(t.module.average), "Your average isn't a function.")
+
+        # more expectations, calling average and checking the results...
+
+
+Checking function results
+-------------------------
+
+The Checker object c has a helper method for checking function results:
+
+    def check(t, c):
+        c.function_returns(t.module, 'sum', [
+            (1, 1,      2),
+            (2, 3,      5),
+            (10, 99,    109),
+            (-3, -6,    -9),
+            ])
+
+The first argument is an object, usually t.module, that should have the
+function.  The second argument is the name of the expected function.
+function_returns will examine the object for the named function using
+quiet expectations.  The third argument is a list of tuples.  Each
+tuple represents one function call.  The last value is the expected return
+value when the other values are used as arguments to the function.
+Each function call produces one line of results:
+
+    (green) sum(1, 1) should return 2.
+    (green) sum(2, 3) should return 5.
+    (red) sum(10, 99) should return 109.  You returned 999.
+    (green) sum(-3, -6) should return -9.
