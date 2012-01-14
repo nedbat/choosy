@@ -9,8 +9,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^gym/', include('gym.urls')),
     url(r'^desk/', include('desk.urls')),
-    url(r'^account/you', direct_to_template, { 'template': 'choosy/templates/you.html' }, name='account_you'), 
+    url(r'^account/you$', direct_to_template, { 'template': 'choosy/templates/you.html' }, name='account_you'), 
     url(r'^account/', include('allauth.urls')),
 
     url(r'^debug/', include('debug.urls')),
+
+    url(r'', include('scrib.urls')),
 )

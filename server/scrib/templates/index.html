@@ -1,0 +1,15 @@
+{% extends "choosy/templates/base.html" %}
+
+{% block main %}
+
+<h1>Your Pages</h1>
+{% if pages %}
+<ul>
+    {% for pg in pages %}
+        <li><a href='{% url show_page pg.id %}'>{{pg}}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+<p><a href='{% url new_page %}'>Create a page</a> or <a href='{% url import_page %}'>import a page</a>.</p>
+
+{% endblock main %}

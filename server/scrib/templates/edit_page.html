@@ -1,0 +1,52 @@
+{% extends "choosy/templates/base.html" %}
+{% load choosy %}
+
+{% block title %}Page: {{ page.title }}{% endblock %}
+
+{% block head %}
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <script>
+  $(function () {
+      choosy.set_csrf_token("{{ csrf_token }}");
+  });
+  </script>
+{% endblock head %}
+
+{% block main %}
+  {% if page.id %}
+    <h1>Edit Page</h1>
+  {% else %}
+    <h1>Add Page</h1>
+  {% endif %}
+
+  <form action="." method="post">
+    {% csrf_token %}
+    <fieldset>
+      <div class='field'>
+        <label for="id_name">Title</label>
+        <div class='widget'><input name="title" /></div>
+      </div>
+      <div class='field'>
+        <label for="id_slug">Slug</label>
+        <div class='widget'><input name="slug" /></div>
+      </div>
+      <div class='field'>
+        <label for="id_text">Text<div class="explain">The text of the page.</div></label>
+        <div class='widget'><textarea name="text"></textarea></div>
+      </div>
+
+      <hr>
+
+      {% for next in page.nextpage_set.all %}
+
+      {% endfor %}
+
+      <div class='field'>
+        <div class='widget'><input type="submit" value="Save" /></div>
+      </div>
+    </fieldset>
+  </form>
+
+{% endblock main %}
+

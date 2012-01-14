@@ -1,0 +1,41 @@
+{% extends "choosy/templates/base.html" %}
+{% load choosy %}
+
+{% block title %}Page: {{ pg.title }}{% endblock %}
+
+{% block head %}
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <script>
+  $(function() {
+      choosy.set_csrf_token("{{ csrf_token }}");
+
+      $('#delete_page').click(
+          function(ev) {
+              choosy.delete_page("{{ pg.id }}");
+          }
+      );
+  });
+  </script>
+{% endblock head %}
+
+{% block main %}
+
+<h1>{{ pg }}</h1>
+<div>{{ pg.text|markdown }}</div>
+<p>&nbsp;</p>
+<hr/>
+<ul>
+{% for next in pg.nextpage_set.all %}
+<li><a href='{% url show_page next.next.id %}'>{{ next.text }}</a></li>
+{% endfor %}
+</ul>
+
+<p>
+    <a href='{% url read_page pg.slug %}'>Read</a> |
+    <a href='{% url edit_page pg.id %}'>Edit</a> | 
+    <a href='{% url yaml_page pg.id %}'>Export</a> |
+    <a href='#' id='delete_page'>Delete</a>
+</p>
+
+{% endblock main %}

@@ -1,0 +1,23 @@
+{% extends "choosy/templates/base.html" %}
+{% load choosy %}
+
+{% block title %}Choose Python: {{ pg.title }}{% endblock %}
+
+{% block head %}
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+{% endblock head %}
+
+{% block main %}
+
+<h1>{{ pg }}</h1>
+<div>{{ pg.text|markdown }}</div>
+<p>&nbsp;</p>
+<hr/>
+<ul>
+{% for next in pg.nextpage_set.all %}
+<li><a href='{% url read_page next.next.slug %}'>{{ next.text }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock main %}

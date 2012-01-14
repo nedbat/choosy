@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'checker',
     'desk',
     'gym',
+    'scrib',
     'choosy',
 
     # for allauth:
