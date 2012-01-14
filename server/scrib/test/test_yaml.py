@@ -29,6 +29,29 @@ PG_YAML = textwrap.dedent("""\
     """)
 
 
+PGS_YAML = textwrap.dedent("""\
+    # This is an example of a multi-page YAML file.
+    -   slug: "hello-world"
+        title: "Hello world"
+        text: |
+            This is the first
+            page. Hello world!
+        nexts:
+            -   text: The next page
+                next: second-page
+            -   text: Something else
+                next: last-page
+
+    -   slug: second-page
+        title: The second page!
+        text: |
+            This is the second page, better than the first.
+        nexts:
+            -   { text: "First page", next: "hello-world" }
+            -   { text: "Yet another", next: "what-page" }
+    """)
+
+
 class YamlImportTest(ChoosyDjangoTestCase):
 
     fixtures = ['users.yaml']
@@ -54,3 +77,17 @@ class YamlImportTest(ChoosyDjangoTestCase):
 
         slugs = [np.next.slug for np in NextPage.objects.filter(page=pg).order_by('order')]
         self.assertEqual(slugs, ['second-page', 'last-page'])
+
+    def test_importing_multipages(self):
+        self.assertEqual(0, Page.objects.count())
+
+        # Post to the import page.
+        self.login()
+        yaml_file = StringIO.StringIO(PGS_YAML)
+        yaml_file.name = "test_yaml.yaml"
+        response = self.client.post(reverse('import_page'), {'yamlfile': yaml_file}, follow=True) 
+
+        self.assertEqual(4, Page.objects.count())
+
+        slugs = [pg.slug for pg in Page.objects.all().order_by('slug')]
+        self.assertEqual(slugs, ['hello-world', 'last-page', 'second-page', 'what-page'])
