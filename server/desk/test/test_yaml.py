@@ -11,7 +11,7 @@ from desk.models import Exercise
 
 EX_SLUG = "hello-world"
 EX_NAME = "Hello world"
-EX_TEXT = "<p>This is the first\nexercise. Good luck!</p>\n"
+EX_TEXT = "This is the first\nexercise. Good luck!\n"
 EX_CHECK = "def check(t, c):\n    with c.expect('Should!'):\n        c.fail('Broke!')\n"
 EX_SOLUTION = "x = 12\ny = 13\n"
 
@@ -19,8 +19,8 @@ EX_YAML = textwrap.dedent("""\
     slug: "hello-world"
     name: "Hello world"
     text: |
-        <p>This is the first
-        exercise. Good luck!</p>
+        This is the first
+        exercise. Good luck!
     check: |
         def check(t, c):
             with c.expect('Should!'):

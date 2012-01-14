@@ -11,13 +11,13 @@
   <link rel="stylesheet" href="/static/codemirror.css">
   <link rel="stylesheet" href="/static/eclipse.css">
   <script>
-  $(function() {
+  $(function () {
       choosy.set_csrf_token("{{ csrf_token }}");
       var check_editor = choosy.make_py_editor($("#id_check"));
       var solution_editor = choosy.make_py_editor($("#id_solution"));
 
       $('.run_code').click(
-          function(ev) {
+          function (ev) {
               check_editor.save();
               solution_editor.save();
               var btn = ev.target;
@@ -46,7 +46,7 @@
       </div>
       <div class='field'>
         {{ form.slug.errors }}
-        <label for="id_name">Slug</label>
+        <label for="id_slug">Slug</label>
         <div class='widget'>{{ form.slug }}</div>
       </div>
       <div class='field'>
