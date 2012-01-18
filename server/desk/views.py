@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import redirect, render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from desk.models import Exercise
@@ -13,18 +12,14 @@ import json
 @login_required
 def index(request):
     exes = Exercise.objects.filter(user=request.user)
-    ctx = RequestContext(request)
-    ctx['exes'] = exes
-    return render_to_response('desk/templates/index.html', ctx)
+    return render(request, 'desk/templates/index.html', {'exes': exes})
 
 @login_required
 def show(request, exid):
     ex = get_object_or_404(Exercise, id=exid)
     if ex.user != request.user:
         return HttpResponseForbidden(json.dumps({'status': 'error'}), mimetype="application/json")
-    ctx = RequestContext(request)
-    ctx['ex'] = ex
-    return render_to_response('desk/templates/show_exercise.html', ctx)
+    return render(request, 'desk/templates/show_exercise.html', {'ex': ex})
 
 @login_required
 def edit(request, exid=None):
@@ -39,9 +34,7 @@ def edit(request, exid=None):
         ex = form.save(user=request.user)
         return redirect('desk_show_exercise', ex.id)
 
-    ctx = RequestContext(request)
-    ctx['form'] = form
-    return render_to_response('desk/templates/edit_exercise.html', ctx)
+    return render(request, 'desk/templates/edit_exercise.html', {'form': form})
 
 @require_POST
 @login_required
@@ -63,9 +56,7 @@ def import_(request):
     else:
         form = ImportExerciseForm()
 
-    ctx = RequestContext(request)
-    ctx['form'] = form
-    return render_to_response('desk/templates/import_exercise.html', ctx)
+    return render(request, 'desk/templates/import_exercise.html', {'form': form})
 
 @login_required
 def yaml(request, exid):
