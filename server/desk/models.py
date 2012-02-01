@@ -31,12 +31,13 @@ class Exercise(models.Model):
     @classmethod
     def from_yaml(cls, yaml_file, user):
         """Create an Exercise from a YAML file."""
-        data = yaml.safe_load(yaml_file)
-        ex, new = cls.objects.get_or_create(slug=data['slug'], user=user)
-        ex.name = data['name']
-        ex.text = data['text']
-        ex.check = data['check']
-        ex.solution = data.get('solution', '')
+        docs = yaml.safe_load_all(yaml_file)
+        for doc in docs:
+            ex, new = cls.objects.get_or_create(slug=doc['slug'], user=user)
+            ex.name = doc['name']
+            ex.text = doc['text']
+            ex.check = doc['check']
+            ex.solution = doc.get('solution', '')
         return ex
 
     def as_yaml(self):

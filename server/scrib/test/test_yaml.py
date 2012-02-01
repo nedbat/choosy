@@ -31,24 +31,26 @@ PG_YAML = textwrap.dedent("""\
 
 PGS_YAML = textwrap.dedent("""\
     # This is an example of a multi-page YAML file.
-    -   slug: "hello-world"
-        title: "Hello world"
-        text: |
-            This is the first
-            page. Hello world!
-        nexts:
-            -   text: The next page
-                next: second-page
-            -   text: Something else
-                next: last-page
+    ---
+    slug: "hello-world"
+    title: "Hello world"
+    text: |
+        This is the first
+        page. Hello world!
+    nexts:
+        -   text: The next page
+            next: second-page
+        -   text: Something else
+            next: last-page
+    ---
 
-    -   slug: second-page
-        title: The second page!
-        text: |
-            This is the second page, better than the first.
-        nexts:
-            -   { text: "First page", next: "hello-world" }
-            -   { text: "Yet another", next: "what-page" }
+    slug: second-page
+    title: The second page!
+    text: |
+        This is the second page, better than the first.
+    nexts:
+        -   { text: "First page", next: "hello-world" }
+        -   { text: "Yet another", next: "what-page" }
     """)
 
 

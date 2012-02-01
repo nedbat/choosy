@@ -29,13 +29,10 @@ class Page(models.Model):
     @classmethod
     def from_yaml(cls, yaml_file, user):
         """Create a Page from a YAML file."""
-        data = yaml.safe_load(yaml_file)
-        if isinstance(data, dict):
-            return cls.from_dict(data, user)
-        else:
-            for d in data:
-                pg = cls.from_dict(d, user)
-            return pg
+        data = yaml.safe_load_all(yaml_file)
+        for d in data:
+            pg = cls.from_dict(d, user)
+        return pg
 
 class NextPage(models.Model):
     page = models.ForeignKey(Page)
