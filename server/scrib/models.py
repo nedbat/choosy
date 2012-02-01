@@ -29,7 +29,7 @@ class Page(models.Model):
     @classmethod
     def from_yaml(cls, yaml_file, user):
         """Create a Page from a YAML file."""
-        data = yaml.load(yaml_file)
+        data = yaml.safe_load(yaml_file)
         if isinstance(data, dict):
             return cls.from_dict(data, user)
         else:

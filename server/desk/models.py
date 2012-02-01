@@ -31,7 +31,7 @@ class Exercise(models.Model):
     @classmethod
     def from_yaml(cls, yaml_file, user):
         """Create an Exercise from a YAML file."""
-        data = yaml.load(yaml_file)
+        data = yaml.safe_load(yaml_file)
         ex, new = cls.objects.get_or_create(slug=data['slug'], user=user)
         ex.name = data['name']
         ex.text = data['text']
