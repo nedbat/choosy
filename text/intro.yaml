@@ -1,0 +1,575 @@
+# intro.yaml
+---
+slug:
+title:
+text: |
+
+    Programming can be fun.
+
+    Programming requires learning a new language.
+
+    There are lots of different programming languages, Python is just one of
+    them.
+
+---
+slug:
+title:
+text: |
+
+    TODO:
+
+        - Computers are very literal.
+        - Programming involves lots of arcane terminology, just like any specialize discipline.
+        - Something early on about indentation errors.
+        - Py 2 vs Py 3
+
+---
+slug:
+title:
+text: |
+
+    Although computers can do lots of complicated things, they are actually
+    quite dumb.  They only do what people have told them to do.  Computers are
+    good at arithmetic, and they are very fast, so they can do billions of
+    operations per second.  But they are always following a programmer's
+    instructions.
+    
+    Programs are the instructions people give to computers.  When you write a
+    program, you are spelling out a series of steps for a computer to follow.
+
+    Programs are written in special languages.  There are lots of different
+    programming languages.  The one we'll use is called Python.
+
+---
+slug:
+title:
+text: |
+
+    (Install Python... yikes)
+
+
+---
+slug:
+title:
+text: |
+
+    One of the convenient features of Python, not shared by all programming
+    languages, is that you can type instructions into an "interactive prompt"
+    and run them immediately.
+
+    If you have Python installed on your computer, you can run it and you 
+    will get a prompt:
+
+        $ python
+        Python 3.2 (r32:88445, Feb 20 2011, 21:29:02) [MSC v.1500 32 bit (Intel)] on win32
+        Type "help", "copyright", "credits" or "license" for more information.
+        >>>
+
+    After showing some information about what version of Python you have, 
+    Python prints a prompt ">>>".
+
+    That triple-greater-than prompt means that Python is waiting for you to
+    give it an instruction.  As soon as you do, Python will execute it for you:
+
+        >>> 2+2
+        4
+        >>>
+
+    Here we told Python "2+2", which it understands to mean, "add 2 and 2
+    together and show me the result."  It executed that instruction, and
+    printed 4.  Then it prompted you again to give it another instruction.
+
+---
+slug:
+title:
+text: |
+
+    Because Python is a programming language, it works differently than
+    English.  Lots of things that make sense to people don't make sense to
+    Python.  For example:
+
+        >>> 2 plus 2
+          File "<stdin>", line 1
+            2 plus 2
+                 ^
+        SyntaxError: invalid syntax
+        >>>
+
+    Here we used an English phrase that any schoolchild would understand, but
+    Python doesn't get it.  It complains to us about a SyntaxError, and
+    indicates the piece it didn't like, the word "plus".
+
+    As you experiment with Python, you'll get errors like this. Don't be
+    alarmed.  You can fix your mistake and try again.  Programming means paying
+    attention to a lot of details, starting with exactly how you express
+    yourself in Python.
+
+    Sometimes, Python won't complain, but will give you the "wrong" answer:
+
+        >>> 2 and 2
+        2
+        >>>
+
+    We'll eventually learn why Python thinks "2 and 2" is 2. It has to do with
+    what the word "and" means in Python. It means kind of the same as in
+    English, but not exactly the same.
+
+    If you find that your program is causing errors, or getting the wrong
+    answer, double-check that you're using the Python words and symbols the way
+    they are meant to be used.  Python uses more words than many other
+    programming languages, which helps make it more readable, but that doesn't
+    mean you can just write English.  It's still a programming language, so you
+    have to use it in very specific ways.
+
+---
+slug:
+title:
+text: |
+
+    We've seen Python add two and two to get four.  Of course, it can perform
+    all sorts of arithmetic operations:
+
+        >>> 2 * 3
+        6
+        >>> 7 * 11 * 13
+        1001
+        >>> 1001 / 13
+        77
+    
+    An asterisk means multiplication and slash means division, since the
+    schoolbook symbols × and ÷ aren't on your keyboard.  Just as you learned in
+    school, multiplication and division happen first, then addition and
+    subtraction:
+
+        >>> 2 + 3 * 4
+        14
+        >>> 100 - 8 / 2
+        96
+
+    And just like in school, parentheses can be used to force particular
+    operations to happen first:
+
+        >>> (2 + 3) * 4
+        20
+        >>> (100 - 8) / 2
+        46
+
+---
+slug:
+title:
+text: |
+
+    When writing programs, you have to deal with values that change over the
+    course of the program.  For example, you may be counting the number of
+    times a certain event has occurred.  Programs track changing values with
+    *variables*.  In Python, a variable is a name that can be assigned a value.
+
+    All of the numbers we've been using so far are values, and we can use names
+    to refer to them. To create a variable, you simply give a name a value with
+    an equals sign:
+
+        >>> x = 17
+
+    You can then use the name anywhere you can use a value:
+
+        >>> x + 2
+        19
+        >>> x * x
+        189
+        >>> x - 200
+        -183
+        >>> -x
+        -17
+
+    Of course, you can have as many names as you like:
+
+        >>> y = 10
+        >>> x + y
+        27
+        >>> z = 100
+        >>> x + y + z
+        127
+        >>> my_other_value = 2
+        >>> y * my_other_value
+        20
+
+---
+slug:
+title:
+text: |
+
+    Names are made of letters, digits, and underscores, and can't start with a
+    digit.  Other than that, you can use whatever name you like for things:
+
+        >>> my_fabulous_number = 1
+        >>> _sshh_its_a_secret = 42
+        >>> THISNEVERCHANGES_1234 = 1234
+
+    If you make a mistake and use an illegal name, Python will give you an
+    error, though which error depends on exactly how you messed up the name.
+    You can't have spaces in a name (use underscores instead):
+
+        >>> my favorite number = 7
+          File "<stdin>", line 1
+            my favorite number = 7
+                      ^
+        SyntaxError: invalid syntax
+
+    You can't use dashes in a name, use underscores instead:
+
+        >>> my-favorite-number = 7
+          File "<stdin>", line 1
+        SyntaxError: can't assign to operator
+        
+    You can't start with a digit:
+
+        >>> 7_is_my_favorite_number = 7
+          File "<stdin>", line 1
+            7_is_my_favorite_number = 7
+                                  ^
+        SyntaxError: invalid syntax
+
+    No punctuation allowed in names:
+
+        >>> i'm_pretty_sure_this_is_ok = 1
+          File "<stdin>", line 1
+            i'm_pretty_sure_this_is_ok = 1
+                                         ^
+        SyntaxError: EOL while scanning string literal
+
+    Python has conventions for what styles of names to use for different kinds
+    of values.  We'll discuss those conventions as they come up. For now,
+    everything should be named with lowercase letters with words separated by
+    underscores.
+
+---
+slug:
+title:
+text: |
+
+    We've seen how to define a name, by assigning a value to a name:
+
+        >>> x = 2
+
+    And we've seen how to use a name, simply by mentioning it wherever a value
+    is needed:
+
+        >>> 1 + x
+        3
+
+    It may seem obvious, but it's worth pointing out, you cannot use a name
+    before it's been defined:
+
+        >>> 1 + xyz
+        Traceback (most recent call last):
+          File "<stdin>", line 1, in <module>
+        NameError: name 'xyz' is not defined
+        
+    Sometimes this will happen because you have a typo in the name.  Python
+    isn't clever enough (or helpful enough) to notice that the bad name is
+    actually a spelling mistake for a name it already knows about.  Remember,
+    programming languages are quite strict.  Computers are fast, but they
+    are dumb.
+
+---
+slug:
+title:
+text: |
+
+    We've only used one kind of value so far, "integers", which is the
+    fancy mathematical term for whole numbers.  Python's whole numbers can be
+    positive, zero, or negative.  They can also be as large as you need them to
+    be.  The ** operator is exponentiation (raising a number to a power):
+
+        >>> 9 ** 20
+        12157665459056928801
+        >>> 9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9
+        12157665459056928801
+
+    Python integers can be as large as you need, not all programming languages
+    have this feature.
+
+    Python also has non-whole numbers, which for geeky reasons are called
+    "floating-point numbers" or "floats" for short.  They work pretty much like
+    you'd expect them to work:
+
+        >>> 1 / 3
+        0.3333333333333333
+        >>> 1 / 9
+        0.1111111111111111
+        >>> (1 / 9) * 9
+        1.0
+
+    But sometimes they will surprise you:
+
+        >>> (1 / 49) * 49
+        0.9999999999999999
+
+    The reason this happens it that floats aren't precies.  They are just
+    approximations to real numbers, and occasionally the approximation becomes
+    apparent. TODO: say something more about this, or wait until later?
+
+---
+slug:
+title:
+text: |
+
+    Using names and floats, we can solve a real problem.  What's the area of a
+    circle with a radius of 2.5?  As I'm sure you remember from geometry, if
+    the radius of a circle is r, then the area of the circle is 2πr² (which is
+    odd, since any dessert-lover knows that pie are round...)
+
+    We can define r:
+
+        >>> r = 1.5
+
+    For convenience we'll define pi:
+
+        >>> pi = 3.14159265
+
+    And then define the area:
+
+        >>> area = 2 * pi * r**2
+
+    Remember that ** is exponentiation.  Finally, we can see what area is:
+
+        >>> area
+        39.269908125
+
+    Notice we didn't need to create the name area if we simply wanted to
+    see the value immediately:
+
+        >>> 2 * pi * r**2
+        39.269908125
+
+---
+slug:
+title:
+text: |
+
+    So far we've been doing simple arithmetic with Python. Of course, it can do
+    much more than that, but before we get to bigger ideas, let's learn the
+    formal names for what we've been doing so far.
+
+    The numbers we've been dealing with (1, 3.14159265, 1001) are "values."
+
+    The five mathematical operations we've seen (+ - * / **) are called
+    "operators."  Python has many operators, and they all have something in
+    common: they take one or two values, and produce another value.
+
+    When you combine names, values, and operators into an instruction that
+    Python understands, you've created a tiny piece of a program called an
+    "expression." When Python runs the program to produce its value, we say it
+    "evaluates" the expression.
+
+    You don't need to memorize these terms, but I try to use them when talking
+    about Python. TODO: Blah.
+
+---
+slug:
+title:
+text: |
+
+    In addition to numbers, Python has another important kind of value for
+    working with text.  We can make a piece of text by enclosing it in
+    apostrophes (also known as single quotes):
+
+        >>> 'Hi there'
+        'Hi there'
+
+    You can use any combination of letters, digits, spaces, or punctuation that
+    you like.  In programming terms, those symbols are all called "characters."
+    The text value is a string of characters, so it's called simply a "string."
+    
+    Just as there are operators that work on numbers, there are operators that
+    work on strings.  For example, I can use + to concatentate (join together)
+    two strings:
+
+        >>> 'Hi' + 'there'
+        'Hithere'
+
+    Notice that Python was very literal, it joined "Hi" with "there", so there
+    is no space between the two words.  Python doesn't know that each string
+    is an English word, so it doesn't do anything special, it just does what
+    you asked for, to join the two strings together.
+
+    If you want a space, you can include one yourself:
+
+        >>> 'Hi ' + 'there'
+        'Hi there'
+        >>> 'Hi' + ' ' + 'there'
+        'Hi there'
+
+    Just as with numbers, we can assign strings to names, and then use the 
+    name instead:
+
+        >>> where = 'there'
+        >>> 'Hi ' + where
+        'Hi there'
+
+
+
+---
+slug:
+title:
+text: |
+
+    TODO: define "code" somewhere
+
+    Most Python programs are not run the way we've been doing it, by typing
+    them into the interactive prompt.  Usually you'd put the Python code into
+    a file, and running it.
+
+    Let's take our circle_area program and put it into a file called 
+    circle_area.py:
+
+        r = 2.5
+        pi = 3.14159265
+        area = 2 * pi * r**2
+        area
+
+    You can run this program from your command-line terminal with something
+    like:
+
+        $ python circle_area.py
+        $
+
+    When you do, nothing seems to happen!  That's because of a difference
+    between the interactive prompt and a program in a file.  At the prompt,
+    if you type an expression, Python will print the result for you.  So
+    when we typed "area", it printed the value of area:
+
+        >>> area
+        39.269908125
+
+    In a real program, Python never prints automatically, you have to
+    explicitly ask for values to be printed.  Change the last line of the
+    program:
+
+        r = 2.5
+        pi = 3.14159265
+        area = 2 * pi * r**2
+        print(area)
+
+    Now run it again:
+
+        $ python circle_area.py
+        39.269908125
+        $
+
+    It prints the area! Note the word "print" here doesn't mean, produce a
+    piece of paper with ink on it.  It mean display the value on the terminal
+    where I'm running the program.
+
+---
+slug:
+title:
+text: |
+
+    As we just saw, there are two ways to run Python code: by typing it into
+    the interactive prompt, or by putting it into a .py file.  The prompt is
+    convenient because you can experiment, and decide what to try next based
+    on values you see printed.  Files are more convenient because you can 
+    run them again without typing everything in more than once.
+
+    There's a compromise between the two which you should know about.  You can
+    create a .py file, and then run it with "-i" on the command line:
+
+        $ python -i circle_area.py
+        39.269908125
+        >>>
+
+    This runs circle_area.py, but when it reaches the end, instead of stopping,
+    it leaves you in the interactive prompt, where you can experiment some
+    more:
+
+        $ python -i circle_area.py
+        39.269908125
+        >>> r
+        2.5
+        >>> pi ** 3
+        31.006276574010307
+        >>> area
+        39.269908125
+
+---
+slug:
+title:
+text: |
+
+    Programs are mostly written so that Python will run them.  But it's
+    important for other people to be able to read your programs too.  Perhaps
+    they'll want to modify them, and need to understand what the program does
+    before they can make a change.  Or maybe someone else wants to read your
+    code just so they know for sure what it does. It may sound funny, but even
+    you will have trouble reading your own programs once a little time has gone
+    by.
+
+    For all these reasons, it's important to make your programs as readable as
+    possible.  Python is known as a very readable programming language, but
+    it's not English.  Luckily, there's a way you can put English into your
+    programs to help other people (or even you!) understand what the program
+    does.
+
+    In a Python program, you can use a hash mark (#) to introduce chunks of
+    text that Python will ignore.  These chunks are called "comments." Anything
+    from a hash mark to the end of the line is a comment and will be ignored.
+    You can write whatever you want in a comment, and only people will read it,
+    so there are no rules about what can go there, or what is "correct."  
+
+    You should use comments freely, any time you think they can help a human
+    reader understand the program.  For example, here's our circle_area.py
+    program, commented:
+
+        # circle_area.py, by Ned Batchelder
+        r = 2.5                 # the radius of the circle.
+        pi = 3.14159265         # the mathematical constant.
+        area = 2 * pi * r**2    # the formula we learned in school.
+        print(area)
+
+    In the case of a program this small and simple, these comments are kind of
+    overkill, but you get the point.  You can use comments to annotate your
+    programs to provide any sort of information you think another person might
+    find useful.  Python ignores them completely.
+
+---
+slug:
+title:
+text: |
+
+    We used the word print to display the area, and you may have noticed we
+    used parentheses with it.  Print is a new kind of thing, called a
+    "function."  Functions are a way to package up parts of a program under
+    a simple name, and then invoke that part of the program by using the
+    name.
+
+    In this case, print() is a function provided by Python itself, that takes
+    care of all of the details of displaying a value onto the terminal.  The
+    value to display is provided inside the parentheses, and is called the
+    "argument" to the function, which is a strange word we got from mathematics
+    somehow.
+
+    We'll learn much more about functions later, including how to write our
+    own.  For now, it's enough to know that like operators, functions are
+    a way that Python provides tools for you to use when you write your 
+    programs.
+
+    When mentioning a function, I often include the parentheses as a visual
+    reminder that it's a function we're talking about.
+
+---
+slug:
+title:
+text: |
+
+    Our circle_area program does its job, but it isn't too useful, because it
+    only calculates the area of one circle.  To find the area of a circle with
+    a radius of 15.3, we'd have to edit circle_area.py to change the value of
+    r.
+
+    Let's change circle_area.py so that when we run it, it asks us for the 
+    radius of the circle.  To do that we're going to use a function called
+    input().
+
+    Input() takes an argument which is text to prompt the user with, then
+    collects
