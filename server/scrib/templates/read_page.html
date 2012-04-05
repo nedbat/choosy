@@ -12,9 +12,8 @@
 
 <h1>{{ pg }}</h1>
 <div>{{ pg.text|markdown }}</div>
-<p>&nbsp;</p>
 <hr/>
-<ul>
+<ul class="next">
 {% for next in pg.nextpage_set.all %}
 <li><a href='{% url read_page next.next.slug %}'>{{ next.text }}</a></li>
 {% endfor %}

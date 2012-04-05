@@ -58,7 +58,7 @@ footer a:hover {
     width: 100%;
     background: white;
     margin: 0;
-    padding: 2em 1em;
+    padding: 2em 1em 1em 1em;
 }
 p, pre {
     line-height: 1.3;
@@ -83,6 +83,19 @@ h2 {
 ul { 
     font-size: 120%;
 }
+
+/* Pages */
+ul.next li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul.next li a:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+/* Exercises */
 .results p {
     padding: .5em 1em;
 }
@@ -96,6 +109,8 @@ ul {
     font-style: italic;
     margin-left: 2em;
 }
+
+/* Editing */
 textarea {
     width: 100%;
     height: 350px;

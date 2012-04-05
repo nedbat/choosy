@@ -16,14 +16,15 @@ class Page(models.Model):
     def from_dict(cls, d, user):
         """Create a Page from a dict representation."""
         pg, _ = cls.objects.get_or_create(slug=d['slug'], user=user)
-        pg.title = d.get('title', '')
-        pg.text = d.get('text', '')
+        pg.title = d.get('title', '').strip()
+        pg.text = d.get('text', '').strip()
 
         pg.nextpage_set.all().delete()
         for i, next in enumerate(d.get('nexts', ())):
             next_pg, _ = Page.objects.get_or_create(slug=next['next'], user=user)
             pg.nextpage_set.create(order=i, text=next['text'], next=next_pg)
 
+        pg.save()
         return pg
 
     @classmethod

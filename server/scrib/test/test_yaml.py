@@ -11,7 +11,7 @@ from scrib.models import Page, NextPage
 
 PG_SLUG = "hello-world"
 PG_TITLE = "Hello world"
-PG_TEXT = "This is the first\npage. Hello world!\n"
+PG_TEXT = "This is the first\npage. Hello world!"
 
 PG_YAML = textwrap.dedent("""\
     slug: "hello-world"
@@ -19,6 +19,7 @@ PG_YAML = textwrap.dedent("""\
     text: |
         This is the first
         page. Hello world!
+
     nexts:
         -
             text: The next page
