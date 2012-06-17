@@ -29,16 +29,21 @@ title:
 text: |
 
     Although computers can do lots of complicated things, they are actually
-    quite dumb.  They only do what people have told them to do.  Computers are
-    good at arithmetic, and they are very fast, so they can do billions of
-    operations per second.  But they are always following a programmer's
-    instructions.
+    quite dumb.  They only do what people have told them to do.  For example,
+    computers are good at arithmetic, and they are very fast, so they can do
+    billions of math operations per second.  But no matter how fast they go,
+    they are always following a programmer's instructions.
     
     Programs are the instructions people give to computers.  When you write a
     program, you are spelling out a series of steps for a computer to follow.
+    Writing programs can be challenging, because you have to figure out exactly
+    how to do the work before you can tell the computer how to do it.  But it
+    can also be very rewarding, because you can get the computer to do exactly
+    what you want it to do.
 
-    Programs are written in special languages.  There are lots of different
-    programming languages.  The one we'll use is called Python.
+    Programs are written in special languages, called programming languages.
+    There are lots of different programming languages.  The one we'll use is
+    called Python.
 
 ---
 slug:
@@ -68,8 +73,8 @@ text: |
     After showing some information about what version of Python you have, 
     Python prints a prompt ">>>".
 
-    That triple-greater-than prompt means that Python is waiting for you to
-    give it an instruction.  As soon as you do, Python will execute it for you:
+    That ">>>" prompt means that Python is waiting for you to give it an
+    instruction.  As soon as you do, Python will execute it for you:
 
         >>> 2+2
         4
@@ -305,7 +310,7 @@ text: |
         >>> (1 / 49) * 49
         0.9999999999999999
 
-    The reason this happens it that floats aren't precies.  They are just
+    The reason this happens it that floats aren't precise.  They are just
     approximations to real numbers, and occasionally the approximation becomes
     apparent. TODO: say something more about this, or wait until later?
 
@@ -549,7 +554,7 @@ text: |
     "argument" to the function, which is a strange word we got from mathematics
     somehow.
 
-    We'll learn much more about functions later, including how to write our
+    You'll learn much more about functions later, including how to write your
     own.  For now, it's enough to know that like operators, functions are
     a way that Python provides tools for you to use when you write your 
     programs.
@@ -571,5 +576,8 @@ text: |
     radius of the circle.  To do that we're going to use a function called
     input().
 
-    Input() takes an argument which is text to prompt the user with, then
-    collects
+    Input() takes an argument which is text to prompt the user with. It prints
+    that prompt on the terminal, then waits for the user to type a line.  The 
+    line is returned as the value of the function:
+
+        
