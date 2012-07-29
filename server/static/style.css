@@ -109,6 +109,22 @@ ul.next li a:hover {
     font-style: italic;
     margin-left: 2em;
 }
+.results div.EXCEPTION {
+    background: #dcc;
+    padding: .5em;
+}
+.results div.EXCEPTION p {
+    padding: 0;
+    margin: 0;
+}
+.results div.EXCEPTION .tbline {
+    margin-left: 1.2em;
+}
+.results div.EXCEPTION .tbsrc {
+    font-family: "Lucida Console", monospace;
+    xfont-size: 80%;
+    margin-left: 2.4em;
+}
 
 /* Editing */
 textarea {

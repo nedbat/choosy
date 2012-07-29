@@ -46,6 +46,29 @@ var choosy = {
                     if (res.status === "ERROR") {
                         $(results).append($("<pre class='ERROR'>").text(res.did));
                     }
+                    else if (res.status === "EXCEPTION") {
+                        var $div = $("<div class='EXCEPTION'>");
+                        var p = $("<p>").text("Traceback (most recent call last):");
+                        $div.append(p);
+                        $(res.exception.traceback).each( function(i, tbframe) {
+                            var line1 = 'File "' + tbframe.file + '", line ' + tbframe.line;
+                            if (tbframe.function) {
+                                line1 += ", in " + tbframe['function'];
+                            }
+                            p = $("<p class='tbline'>").text(line1);
+                            $div.append(p);
+                            p = $("<p class='tbsrc'>").text(tbframe.text);
+                            $div.append(p);
+                            if (tbframe.offset) {
+                                var spaces = Array(tbframe.offset).join("_");
+                                p = $("<p class='tbsrc'>").text(spaces + "^");
+                                $div.append(p);
+                            }
+                        });
+                        p = $("<p>").text(res.exception.type + ": " + res.exception.args[0]);
+                        $div.append(p);
+                        $(results).append($div);
+                    }
                     else {
                         var p = $("<p class='" + res.status + "'>").text(res.expect);
                         $(results).append(p)
