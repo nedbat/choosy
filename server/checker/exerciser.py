@@ -166,34 +166,34 @@ def run_exercise(tmpdir):
 
     """
     results = {'stdout': '', 'checks': []}
-    with patchattr(sys, 'stdout', StringIO()) as stdout, \
-        patchattr(sys, 'path', ['.']+sys.path):
-        with isolated_modules():
-            c = None
-            try:
-                import exercise
-            except SystemExit:
-                # The user code called sys.exit(), it's ok.
-                pass
-            except Exception:
-                tb = traceback.format_exc()
-                tb = tb.replace(tmpdir + os.sep, "")
-                stdout.write(tb)
-            else:
+    with patchattr(sys, 'stdout', StringIO()) as stdout:
+        with patchattr(sys, 'path', ['.']+sys.path):
+            with isolated_modules():
+                c = None
                 try:
-                    t = Trial(module=exercise, stdout=stdout.getvalue())
-                    c = Checker()
-                    import check
-                    try:
-                        check.check(t, c)
-                    except c.Done:
-                        pass
+                    import exercise
+                except SystemExit:
+                    # The user code called sys.exit(), it's ok.
+                    pass
                 except Exception:
-                    # Something went wrong in the checking code.
-                    c.add_result('ERROR', exc=sys.exc_info())
-            finally:
-                results['stdout'] = stdout.getvalue()
-                if c:
-                    results['checks'] = c.results
+                    tb = traceback.format_exc()
+                    tb = tb.replace(tmpdir + os.sep, "")
+                    stdout.write(tb)
+                else:
+                    try:
+                        t = Trial(module=exercise, stdout=stdout.getvalue())
+                        c = Checker()
+                        import check
+                        try:
+                            check.check(t, c)
+                        except c.Done:
+                            pass
+                    except Exception:
+                        # Something went wrong in the checking code.
+                        c.add_result('ERROR', exc=sys.exc_info())
+                finally:
+                    results['stdout'] = stdout.getvalue()
+                    if c:
+                        results['checks'] = c.results
 
     return results
