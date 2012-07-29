@@ -192,8 +192,23 @@ class RunPythonTest(CheckerTestCase):
 
     def test_syntax_error_in_user_code(self):
         results = run_python("""a = 1'hello'""", "")
-        self.assertIn("""1'hello'""", results['stdout'])
-        self.assertIn("SyntaxError", results['stdout'])
+        self.assertEqual("", results['stdout'])
+        checks = results['checks']
+        self.assertEqual(len(checks), 1)
+        self.assertEqual(checks[0]['status'], "EXCEPTION")
+        self.assertEqual("SyntaxError", checks[0]['exception']['type'])
+        self.assertEqual("a = 1'hello'", checks[0]['exception']['traceback'][-1]['text'])
+        self.assertEqual(12, checks[0]['exception']['traceback'][-1]['offset'])
+
+    def test_indentation_error_in_user_code(self):
+        results = run_python("""a = 1\n  b = 2""", "")
+        self.assertEqual("", results['stdout'])
+        checks = results['checks']
+        self.assertEqual(len(checks), 1)
+        self.assertEqual(checks[0]['status'], "EXCEPTION")
+        self.assertEqual("IndentationError", checks[0]['exception']['type'])
+        self.assertEqual("b = 2", checks[0]['exception']['traceback'][-1]['text'])
+        self.assertEqual(2, checks[0]['exception']['traceback'][-1]['offset'])
 
     def test_error_in_check_code(self):
         results = run_python("""a = 17""", """b = 1/0""")

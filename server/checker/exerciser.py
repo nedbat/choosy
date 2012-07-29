@@ -77,6 +77,22 @@ class Checker(object):
                 {'file':f, 'line':l, 'function':fn, 'text':t} 
                     for f, l, fn, t in traceback.extract_tb(exc_tb)
                 ]
+            if issubclass(exc_type, SyntaxError):
+                # SyntaxError's last frame isn't actually a frame,
+                # because no code was executed in the file that couldn't
+                # be compiled.  But the args have enough information to
+                # cobble together the pseudo-frame that is displayed.
+                # This is inspired by traceback.py, format_exception_only()
+                try:
+                    msg, (f, l, offset, bad) = exc_value.args
+                except Exception:
+                    pass
+                else:
+                    f = f or "<string>"
+                    tb.append({
+                        'file':f, 'line':l, 'text':bad.strip(), 'offset': offset
+                        })
+
             msg = str(exc_value)
             d['exception'] = {
                 'type': exc_type.__name__, 
@@ -158,31 +174,31 @@ def run_exercise(tmpdir):
             {'status':'FAIL', 'expect':'a should equal 17', 'did':'Your a equals 43'},
         ]
 
-    `status` is one of 'OK', 'FAIL', or 'ERROR'.  'OK' means the expectation 
-    was met, 'FAIL' means it wasn't met, and 'ERROR' means an exception was
-    encountered.  `expect` is the text of the `expect` call, what was expected.
-    `did` is a message about what actually happened.  `traceback` is a list of
-    tuples, the traceback, if any, in the form produced by `traceback.extract_tb`.
+    `status` is one of 'OK', 'FAIL', 'EXCEPTION', or 'ERROR'.  'OK' means the
+    expectation was met, 'FAIL' means it wasn't met, 'EXCEPTION' means an
+    exception was encountered in the student's code, and 'ERROR' means an
+    exception was encountered in the teacher's code.  
+    
+    `expect` is the text of the `expect` call, what was expected.  `did` is a
+    message about what actually happened.  `traceback` is a list of tuples, the
+    traceback, if any, in the form produced by `traceback.extract_tb`.
 
     """
     results = {'stdout': '', 'checks': []}
     with patchattr(sys, 'stdout', StringIO()) as stdout:
         with patchattr(sys, 'path', ['.']+sys.path):
             with isolated_modules():
-                c = None
+                c = Checker()
                 try:
                     import exercise
                 except SystemExit:
                     # The user code called sys.exit(), it's ok.
                     pass
                 except Exception:
-                    tb = traceback.format_exc()
-                    tb = tb.replace(tmpdir + os.sep, "")
-                    stdout.write(tb)
+                    c.add_result('EXCEPTION', exc=sys.exc_info())
                 else:
                     try:
                         t = Trial(module=exercise, stdout=stdout.getvalue())
-                        c = Checker()
                         import check
                         try:
                             check.check(t, c)
@@ -193,7 +209,6 @@ def run_exercise(tmpdir):
                         c.add_result('ERROR', exc=sys.exc_info())
                 finally:
                     results['stdout'] = stdout.getvalue()
-                    if c:
-                        results['checks'] = c.results
+                    results['checks'] = c.results
 
     return results
