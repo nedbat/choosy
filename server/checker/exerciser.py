@@ -64,7 +64,7 @@ class Checker(object):
         elif not self.quiet:
             self.add_result("OK", expect=self.desc)
 
-    def add_result(self, status, expect=None, did=None, exc=None):
+    def add_result(self, status, expect=None, did=None, exc=None, skip_frames=0):
         """Add a result."""
         d = { 'status': status }
         if expect:
@@ -73,6 +73,8 @@ class Checker(object):
             d['did'] = did
         if exc:
             exc_type, exc_value, exc_tb = exc
+            for _ in range(skip_frames):
+                exc_tb = exc_tb.tb_next
             tb = [
                 {'file':f, 'line':l, 'function':fn, 'text':t} 
                     for f, l, fn, t in traceback.extract_tb(exc_tb)
@@ -197,7 +199,7 @@ def run_exercise(tmpdir):
                     # The user code called sys.exit(), it's ok.
                     pass
                 except Exception:
-                    c.add_result('EXCEPTION', exc=sys.exc_info())
+                    c.add_result('EXCEPTION', exc=sys.exc_info(), skip_frames=1)
                 else:
                     try:
                         t = Trial(module=exercise, stdout=stdout.getvalue())
