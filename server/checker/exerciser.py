@@ -94,10 +94,12 @@ class Checker(object):
                         })
 
             msg = str(exc_value)
+            readable = traceback.format_exception_only(exc_type, exc_value)[-1].strip()
             d['exception'] = {
                 'type': exc_type.__name__, 
                 'message': msg,
                 'traceback': tb,
+                'readable': readable, 
                 }
             args = exc_value.args
             if isinstance(args, tuple) and len(args) == 1 and args[0] == msg:

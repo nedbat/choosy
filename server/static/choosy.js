@@ -65,7 +65,7 @@ var choosy = {
                                 $div.append(p);
                             }
                         });
-                        p = $("<p>").text(res.exception.type + ": " + res.exception.args[0]);
+                        p = $("<p>").text(res.exception.readable);
                         $div.append(p);
                         $(results).append($div);
                     }
