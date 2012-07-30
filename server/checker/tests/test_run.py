@@ -88,6 +88,7 @@ class CheckerTest(CheckerTestCase):
                 'exception': {
                     'type': "MyException",
                     'message': "It wasn't fine!",
+                    'readable': "MyException: It wasn't fine!",
                     'traceback': [
                         {'file':'checker/tests/test_run.py', 'line':0, 'function':'test_error', 'text':'raise MyException("It wasn\'t fine!")'},
                         ]},
@@ -173,6 +174,7 @@ class FunctionReturnsTest(CheckerTestCase):
                 'exception': {
                     'type': 'Flake',
                     'message': 'Oops',
+                    'readable': 'Flake: Oops',
                     'traceback': [
                         {'file':'checker/exerciser.py', 'line':0, 'function':'function_returns', 'text':'actual_output = fn(*inputs)'},
                         {'file':'checker/tests/test_run.py', 'line':0, 'function':'flaky', 'text':'raise self.Flake("Oops")'},
