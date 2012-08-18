@@ -22,7 +22,7 @@ def show(request, pageid):
 @login_required
 def edit(request, pageid=None):
     if request.method == "POST":
-        pass
+        raise Exception("This isn't done!")
     else:
         if pageid:
             page = get_object_or_404(Page, id=pageid)
