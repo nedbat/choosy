@@ -2,11 +2,14 @@ import re
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
 
 import markdown as markdown_mod
 import pygments
+
+from desk.models import Exercise
 
 register = template.Library()
 
@@ -42,7 +45,13 @@ syntax_color.is_safe = True
 def embed_exercises(value):
     """Find [ex:slug] paragraphs, and embed them."""
     def get_exercise(m):
-        return "<p>Exercise %s will go here.</p>" % m.group('slug')
+        slug = m.group('slug')
+        try:
+            ex = Exercise.objects.get(slug=slug)
+        except Exercise.DoesNotExist:
+            return "<p><b>Exercise %s not found!</b></p>" % (slug,)
+
+        return render_to_string("gym/templates/oneexercise.html", {'ex': ex})
 
     value = re.sub(r"<p>\[ex:\s*(?P<slug>\w+)\s*]</p>", get_exercise, value)
     return value

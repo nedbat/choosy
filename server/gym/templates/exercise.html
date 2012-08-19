@@ -13,16 +13,6 @@
   <script>
       $(function() {
           choosy.set_csrf_token("{{ csrf_token }}");
-          var code_editor = choosy.make_py_editors($("textarea.code"))[0];
-          $('.run_code').click(
-              function(ev) {
-                  code_editor.save();
-                  var btn = ev.target;
-                  var par = $(btn).closest(".exercise");
-                  var exid = par.data("exid");
-                  choosy.run_python(exid, par.find(".code"), "", par.find(".stdout"), par.find(".results"));
-              }
-          );
           $('.highlight').click(
               function(ev) {
                   codemirror.setLineClass(2, "errorline");

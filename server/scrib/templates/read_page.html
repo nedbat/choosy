@@ -5,7 +5,16 @@
 
 {% block head %}
   <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+  <script src='/static/codemirror-compressed.js' type="text/javascript" charset="utf-8"></script>
+  <script src='/static/python.js' type="text/javascript" charset="utf-8"></script>
   <script src='/static/choosy.js' type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="/static/codemirror.css">
+  <link rel="stylesheet" href="/static/eclipse.css">
+  <script>
+      $(function() {
+          choosy.set_csrf_token("{{ csrf_token }}");
+      });
+  </script>
 {% endblock head %}
 
 {% block main %}

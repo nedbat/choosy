@@ -123,9 +123,24 @@ var choosy = {
         return editors;
     },
 
+    // An array of code editors, parallel to the textarea.code on the page.
+    code_editors: [],
+
     // page_init: invoked when the page is ready: all page init stuff goes
     // here.
     page_init: function() {
+        choosy.code_editors = choosy.make_py_editors($("textarea.code"));
+        $('.run_code').click(
+            function(ev) {
+                $.each(choosy.code_editors, function(index, item) {
+                    item.save();
+                });
+                var btn = ev.target;
+                var par = $(btn).closest(".exercise");
+                var exid = par.data("exid");
+                choosy.run_python(exid, par.find(".code"), "", par.find(".stdout"), par.find(".results"));
+            }
+        );
     }
 };
 
