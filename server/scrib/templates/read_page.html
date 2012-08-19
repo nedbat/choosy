@@ -11,7 +11,7 @@
 {% block main %}
 
 <h1>{{ pg }}</h1>
-<div>{{ pg.text|markdown }}</div>
+<div>{{ pg.text|markdown|embed_exercises }}</div>
 <hr/>
 <ul class="next">
 {% for next in pg.nextpage_set.all %}

@@ -13,13 +13,14 @@
   <script>
       $(function() {
           choosy.set_csrf_token("{{ csrf_token }}");
-          var code_editor = choosy.make_py_editor($("#editor"));
+          var code_editor = choosy.make_py_editors($("textarea.code"))[0];
           $('.run_code').click(
               function(ev) {
                   code_editor.save();
                   var btn = ev.target;
-                  var par = $(btn).parents(".exercise");
-                  choosy.run_python("{{ ex.id }}", par.find(".code"), "", par.find(".stdout"), par.find(".results"));
+                  var par = $(btn).closest(".exercise");
+                  var exid = par.data("exid");
+                  choosy.run_python(exid, par.find(".code"), "", par.find(".stdout"), par.find(".results"));
               }
           );
           $('.highlight').click(
@@ -32,12 +33,5 @@
 {% endblock head %}
 
 {% block main %}
-  {{ ex.text|markdown }}
-
-  <div class='exercise'>
-    <textarea class='code' id='editor'></textarea>
-    <p><input class='run_code' type='button' value='Run it'></input></p>
-    <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
-    <div class='results'></div>
-  </div>
+{% include "gym/templates/oneexercise.html" %}
 {% endblock main %}

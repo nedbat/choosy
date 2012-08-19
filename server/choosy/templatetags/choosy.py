@@ -1,3 +1,5 @@
+import re
+
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
@@ -33,3 +35,15 @@ def syntax_color(value):
         lexer = pygments.lexers.PythonLexer()
     return mark_safe(pygments.highlight(force_unicode(value), lexer, pygments.formatters.HtmlFormatter()))
 syntax_color.is_safe = True
+
+
+@register.filter
+@stringfilter
+def embed_exercises(value):
+    """Find [ex:slug] paragraphs, and embed them."""
+    def get_exercise(m):
+        return "<p>Exercise %s will go here.</p>" % m.group('slug')
+
+    value = re.sub(r"<p>\[ex:\s*(?P<slug>\w+)\s*]</p>", get_exercise, value)
+    return value
+embed_exercises.is_safe = True

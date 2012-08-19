@@ -1,0 +1,11 @@
+{# Include this to display `ex` as an exercise. #}
+{% load choosy %}
+
+<div class='exercise' data-exid='{{ ex.id }}'>
+  {{ ex.text|markdown }}
+
+  <textarea class='code'></textarea>
+  <p><input class='run_code' type='button' value='Run it'></input></p>
+  <textarea class='stdout' style='display:none' cols='80' rows='10'></textarea>
+  <div class='results'></div>
+</div>

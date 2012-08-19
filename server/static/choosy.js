@@ -108,15 +108,19 @@ var choosy = {
         singleLineStringErrors: true
     },
 
-    // make_py_editor: turn textareas into CodeMirror text editors.
-    make_py_editor: function(elts) {
-        return CodeMirror.fromTextArea(elts[0], {
-            mode: choosy.python_mode,
-            theme: "eclipse",
-            lineNumbers: true,
-            tabMode: "shift",
-            indentUnit: 4
+    // make_py_editors: turn textareas into CodeMirror text editors.
+    make_py_editors: function(elts) {
+        var editors = [];
+        elts.each(function(index, elt) {
+            editors.push(CodeMirror.fromTextArea(elt, {
+                mode: choosy.python_mode,
+                theme: "eclipse",
+                lineNumbers: true,
+                tabMode: "shift",
+                indentUnit: 4
+            }));
         });
+        return editors;
     },
 
     // page_init: invoked when the page is ready: all page init stuff goes
