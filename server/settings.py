@@ -134,11 +134,15 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Choosy's apps
     'checker',
     'desk',
     'gym',
     'scrib',
     'choosy',
+
+    # Third-party
+    'typogrify',
 
     # for allauth:
     'emailconfirmation',

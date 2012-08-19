@@ -1,5 +1,5 @@
 {% extends "choosy/templates/base.html" %}
-{% load choosy %}
+{% load choosy typogrify_tags %}
 
 {% block title %}Choose Python: {{ pg.title }}{% endblock %}
 
@@ -20,7 +20,7 @@
 {% block main %}
 
 <h1>{{ pg }}</h1>
-<div>{{ pg.text|markdown|embed_exercises }}</div>
+<div>{{ pg.text|markdown|embed_exercises|typogrify }}</div>
 <hr/>
 <ul class="next">
 {% for next in pg.nextpage_set.all %}
