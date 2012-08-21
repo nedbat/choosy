@@ -20,7 +20,7 @@
 {% block main %}
 
 <h1>{{ pg }}</h1>
-<div>{{ pg.text|markdown|embed_exercises|typogrify }}</div>
+<div class='page_body'>{{ pg.text|markdown|embed_exercises|typogrify }}</div>
 <hr/>
 <ul class="next">
 {% for next in pg.nextpage_set.all %}

@@ -60,11 +60,13 @@ footer a:hover {
     margin: 0;
     padding: 2em 1em 1em 1em;
 }
-p, pre {
+p {
     line-height: 1.3;
     font-size: 120%;
 }
 pre {
+    line-height: 1.3;
+    font-size: 100%;
     font-family: "Lucida Console", monospace;
     margin: 1em 3em;
     padding: .5em 1em;
@@ -85,6 +87,13 @@ ul {
 }
 
 /* Pages */
+.page_body .exercise {
+    border-radius: 10px;
+    border: 1px solid #8c8;
+    background: #efe;
+    padding: 1em;
+}
+
 ul.next li a {
     text-decoration: none;
     color: inherit;
@@ -179,3 +188,10 @@ label div.explain {
     font-style: italic;
     color: #888;
 }
+
+/* Syntax coloring */
+.codehilite .c1 { color: #3F7F5F; }
+.codehilite .c { color: #3F7F5F; }
+.codehilite .s { color: #2A00FF; }
+.codehilite .sd { color: #2A00FF; }
+.codehilite .k { color: #7F0055; font-weight: bold; }
