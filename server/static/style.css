@@ -88,7 +88,7 @@ ul {
 
 /* Pages */
 .page_body .exercise {
-    border-radius: 10px;
+    border-radius: 1em;
     border: 1px solid #8c8;
     background: #efe;
     padding: 1em;

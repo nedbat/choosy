@@ -33,11 +33,16 @@ class Exercise(models.Model):
         """Create an Exercise from a YAML file."""
         docs = yaml.safe_load_all(yaml_file)
         for doc in docs:
-            ex, new = cls.objects.get_or_create(slug=doc['slug'], user=user)
-            ex.name = doc['name']
-            ex.text = doc['text']
-            ex.check = doc['check']
-            ex.solution = doc.get('solution', '')
+            cls.from_dict(doc, user)
+
+    @classmethod
+    def from_dict(cls, d, user):
+        ex, new = cls.objects.get_or_create(slug=d['slug'], user=user)
+        ex.name = d['name']
+        ex.text = d['text']
+        ex.check = d['check']
+        ex.solution = d.get('solution', '')
+        ex.save()
         return ex
 
     def as_yaml(self):

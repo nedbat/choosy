@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from scrib.models import Page
-
+from scrib.importer import import_yaml
 
 @login_required
 def index(request):
@@ -42,13 +42,13 @@ def import_(request):
     if request.method == "POST":
         form = ImportPageForm(request.POST, request.FILES)
         if form.is_valid():
-            new_pg = Page.from_yaml(request.FILES['yamlfile'], user=request.user)
-            new_pg.save()
-            return redirect('show_page', new_pg.id)
+            import_yaml(request.FILES['yamlfile'], user=request.user)
+            return redirect('page_index')
     else:
         form = ImportPageForm()
 
     return render(request, 'scrib/templates/import_page.html', {'form': form})
+
 
 @login_required
 def delete(request, pageid):
